@@ -1,0 +1,38 @@
+{
+    "Archives": {
+        "bonus": 10,
+        "skills": [
+            "Bureaucracy",
+            "Knowledge (any)",
+            "Knowledge (any)",
+            "Navigate",
+            "Research",
+            "Stealth"
+        ]
+    },
+    "Computational Demonology": {
+        "bonus": 10,
+        "skills": [
+            "Computer Use (any)",
+            "Computer Use (Magic)",
+            "Science (Mathematics)",
+            "Science (Thaumaturgy)",
+            "Sorcery"
+        ]
+    },
+    "all": {
+        "bonus": 5,
+        "skills": [
+            "Bureaucracy",
+            "Computer Use",
+            "Fine Manipulation",
+            "Firearm (any)",
+            "Knowledge (Accounting)",
+            "Knowledge (Espionage)",
+            "Knowledge (Law)",
+            "Knowledge (Occult)",
+            "Knowledge (Politics)",
+            "Spot"
+        ]
+    }
+}

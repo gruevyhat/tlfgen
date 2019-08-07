@@ -1,0 +1,35 @@
+// Package main implements a simple CLI for tlfgen.
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/docopt/docopt-go"
+	"github.com/gruevyhat/tlfgen"
+)
+
+var usage = `SotDL Character Generator
+
+Usage: tlf [options]
+
+Options:
+  -n, --name=<str>          The character's full name; random if not specified.
+  -g, --gender=<str>        The character's gender.
+  -s, --seed=<hex>          Character generation signature.
+  --log-level=<str>         One of {INFO, WARNING, ERROR}. [default: ERROR]
+  -h --help
+  --version
+`
+
+func main() {
+	opts := tlfgen.Opts{}
+	optFlags, _ := docopt.ParseArgs(usage, nil, tlfgen.VERSION)
+	optFlags.Bind(&opts)
+	c, err := tlfgen.NewCharacter(opts)
+	if err != nil {
+		fmt.Println("An error has occurred. Aborting.")
+		os.Exit(1)
+	}
+	c.ToJSON(true)
+}

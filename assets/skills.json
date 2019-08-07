@@ -1,0 +1,298 @@
+{
+    "Appraise": {
+        "base": 15,
+        "specialties": null
+    },
+    "Art": {
+        "base": 5,
+        "specialties": [
+            "Calligraphy",
+            "Drawing",
+            "Painting",
+            "Photography",
+            "Sculpture",
+            "Writing",
+            "Other"
+        ]
+    },
+    "Artillery": {
+        "base": 0,
+        "specialties": [
+            "Cannon",
+            "Rocket Launcher",
+            "Turret",
+            "Vehicular Weapon",
+            "Other"
+        ]
+    },
+    "Athletics": {
+        "base": 10,
+        "specialties": [
+            "Acrobatics",
+            "American and Canadian Football",
+            "Baseball",
+            "Basketball",
+            "Bowling",
+            "Cricket",
+            "Cycling",
+            "Golf",
+            "Hockey",
+            "Rugby",
+            "Skating",
+            "Skiing",
+            "Soccer",
+            "Tennis",
+            "Track & Field",
+            "Other"
+        ]
+    },
+    "Bargain": {
+        "base": 5,
+        "specialties": []
+    },
+    "Brawl": {
+        "base": 25,
+        "specialties": []
+    },
+    "Bureaucracy": {
+        "base": 5,
+        "specialties": []
+    },
+    "Climb": {
+        "base": 40,
+        "specialties": []
+    },
+    "Command": {
+        "base": 5,
+        "specialties": []
+    },
+    "Computer Use": {
+        "base": 5,
+        "specialties": [
+            "Art",
+            "Design",
+            "Gaming",
+            "Magic",
+            "Hacking",
+            "Maintenance",
+            "Programming",
+            "Repair",
+            "Other"
+        ]
+    },
+    "Craft": {
+        "base": 5,
+        "specialties": [
+            "Carpentry",
+            "Cooking",
+            "Leatherworking",
+            "Pottery",
+            "Sewing",
+            "Woodworking"
+        ]
+    },
+    "Cthulhu Mythos": {
+        "base": 0,
+        "specialties": []
+    },
+    "Demolition": {
+        "base": 1,
+        "specialties": []
+    },
+    "Disguise": {
+        "base": 5,
+        "specialties": []
+    },
+    "Dodge": {
+        "base": 0,
+        "specialties": []
+    },
+    "Drive": {
+        "base": 20,
+        "specialties": [
+            "Automobile",
+            "Industrial Mover",
+            "Motorcycle",
+            "Tank",
+            "Other"
+        ]
+    },
+    "Etiquette": {
+        "base": 5,
+        "specialties": []
+    },
+    "Fast Talk": {
+        "base": 5,
+        "specialties": []
+    },
+    "Fine Manipulation": {
+        "base": 5,
+        "specialties": []
+    },
+    "Firearm": {
+        "base": -1,
+        "specialties": [
+            "Assault Rifle",
+            "Esoteric",
+            "Exotic",
+            "Pistol",
+            "Rifle",
+            "Shotgun",
+            "Submachine Gun"
+        ]
+    },
+    "First Aid": {
+        "base": 30,
+        "specialties": []
+    },
+    "Gaming": {
+        "base": 10,
+        "specialties": []
+    },
+    "Grapple": {
+        "base": 25,
+        "specialties": []
+    },
+    "Heavy Machine": {
+        "base": 5,
+        "specialties": [
+            "Boiler",
+            "Bulldozer",
+            "Crane",
+            "Engine",
+            "Turbine",
+            "Wrecker",
+            "Other"
+        ]
+    },
+    "Heavy Weapon": {
+        "base": -1,
+        "specialties": [
+            "Bazooka",
+            "Grenade Launcher",
+            "Heavy Machine Gun",
+            "Minigun",
+            "Rocket Launcher"
+        ]
+    },
+    "Hide": {
+        "base": 10,
+        "specialties": []
+    },
+    "Insight": {
+        "base": 5,
+        "specialties": []
+    },
+    "Jump": {
+        "base": 25,
+        "specialties": []
+    },
+    "Knowledge": {
+        "base": 0,
+        "specialties": []
+    },
+    "Language": {
+        "base": 0,
+        "specialties": []
+    },
+    "Listen": {
+        "base": 0,
+        "specialties": []
+    },
+    "Medicine": {
+        "base": 0,
+        "specialties": []
+    },
+    "Melee Weapon": {
+        "base": 0,
+        "specialties": []
+    },
+    "Missile Weapon": {
+        "base": 0,
+        "specialties": []
+    },
+    "Navigate": {
+        "base": 0,
+        "specialties": []
+    },
+    "Perform": {
+        "base": 0,
+        "specialties": []
+    },
+    "Persuade": {
+        "base": 0,
+        "specialties": []
+    },
+    "Pilot": {
+        "base": 0,
+        "specialties": []
+    },
+    "Psychotherapy": {
+        "base": 0,
+        "specialties": []
+    },
+    "Repair": {
+        "base": 0,
+        "specialties": []
+    },
+    "Research": {
+        "base": 0,
+        "specialties": []
+    },
+    "Ride": {
+        "base": 0,
+        "specialties": []
+    },
+    "Science": {
+        "base": 0,
+        "specialties": []
+    },
+    "Sense": {
+        "base": 0,
+        "specialties": []
+    },
+    "Sleight of Hand": {
+        "base": 0,
+        "specialties": []
+    },
+    "Sorcery": {
+        "base": 0,
+        "specialties": []
+    },
+    "Spot": {
+        "base": 0,
+        "specialties": []
+    },
+    "Status": {
+        "base": 0,
+        "specialties": []
+    },
+    "Stealth": {
+        "base": 0,
+        "specialties": []
+    },
+    "Strategy": {
+        "base": 0,
+        "specialties": []
+    },
+    "Swim": {
+        "base": 0,
+        "specialties": []
+    },
+    "Teach": {
+        "base": 0,
+        "specialties": []
+    },
+    "Technology Use": {
+        "base": 0,
+        "specialties": []
+    },
+    "Throw": {
+        "base": 0,
+        "specialties": []
+    },
+    "Track": {
+        "base": 0,
+        "specialties": []
+    }
+}

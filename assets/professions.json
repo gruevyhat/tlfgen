@@ -1,0 +1,41 @@
+{
+    "Occultist": {
+        "options": [
+            8,
+            2
+        ],
+        "skills": [
+            "Fast Talk",
+            "Insight",
+            "Knowledge (Anthropology)",
+            "Knowledge (History)",
+            "Knowledge (Occult)",
+            "Language (any)",
+            "Language (Own)",
+            "Research",
+            "Computer Use (any)",
+            "Craft (any)",
+            "Knowledge (Archaeology)",
+            "Medicine",
+            "Science (any)"
+        ]
+    },
+    "Philosopher": {
+        "options": [
+            8,
+            2
+        ],
+        "skills": [
+            "Insight",
+            "Knowledge (History)",
+            "Knowledge (Philosophy)",
+            "Language (any)",
+            "Language (Own)",
+            "Persuade",
+            "Research",
+            "Teach",
+            "Knowledge (any)",
+            "Science (any)"
+        ]
+    }
+}
