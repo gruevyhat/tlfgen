@@ -7,17 +7,17 @@
         "skills": [
             "Fast Talk",
             "Insight",
-            "Knowledge (Anthropology)",
-            "Knowledge (History)",
-            "Knowledge (Occult)",
-            "Language (any)",
-            "Language (Own)",
+            "Knowledge: Anthropology",
+            "Knowledge: History",
+            "Knowledge: Occult",
+            "Language: *",
+            "Language: Own",
             "Research",
-            "Computer Use (any)",
-            "Craft (any)",
-            "Knowledge (Archaeology)",
+            "Computer Use: *",
+            "Craft: *",
+            "Knowledge: Archaeology",
             "Medicine",
-            "Science (any)"
+            "Science: any"
         ]
     },
     "Philosopher": {
@@ -27,15 +27,15 @@
         ],
         "skills": [
             "Insight",
-            "Knowledge (History)",
-            "Knowledge (Philosophy)",
-            "Language (any)",
-            "Language (Own)",
+            "Knowledge: History",
+            "Knowledge: Philosophy",
+            "Language: *",
+            "Language: Own",
             "Persuade",
             "Research",
             "Teach",
-            "Knowledge (any)",
-            "Science (any)"
+            "Knowledge: *",
+            "Science: *"
         ]
     }
 }

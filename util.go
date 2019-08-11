@@ -106,15 +106,18 @@ func weightedRandomChoice(choices []string, weights []float64) string {
 // Die represents a single die of the form <code>D6+<pips>.
 type Die struct {
 	sides int
-	num   int
+	code  int
 }
 
 func (d Die) roll() (n int) {
-	n = randomInt(1, d.sides)
+	n = 0
+	for i := 0; i < d.code; i++ {
+		n += randomInt(1, d.sides)
+	}
 	return n
 }
 
-func (d Die) toStr() (dieString string) {
-	dieStr = strconv.Itoa(d.num) + "D" + strconv.Itoa(d.sides)
+func (d Die) toStr() (dieStr string) {
+	dieStr = strconv.Itoa(d.code) + "D" + strconv.Itoa(d.sides)
 	return dieStr
 }

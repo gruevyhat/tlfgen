@@ -38,13 +38,16 @@ var (
 
 // Character represents the primary features of the character.
 type Character struct {
-	Name                   string                 `json:"name"`
-	Gender                 string                 `json:"gender"`
-	Age                    int                    `json:"age"`
-	BaseCharacteristics    BaseCharacteristics    `json:"base_characteristics"`
-	DerivedCharacteristics DerivedCharacteristics `json:"derived_characteristics"`
-	Skills                 map[string]int         `json:"skills"`
-	Seed                   string                 `json:"seed"`
+	Name            string                 `json:"name"`
+	Gender          string                 `json:"gender"`
+	Age             int                    `json:"age"`
+	PersonalityType string                 `json:"personality_type"`
+	Assignment      string                 `json:"assignment"`
+	Profession      string                 `json:"profession"`
+	Skills          map[string]Skill       `json:"skills"`
+	Seed            string                 `json:"seed"`
+	Base            BaseCharacteristics    `json:"base"`
+	Derived         DerivedCharacteristics `json:"derived"`
 	//Description string     `json:"description"`
 	//Weapons     []Weapon   `json:"weapons"`
 	//Equipment   []string   `json:"equipment"`
@@ -64,19 +67,19 @@ type BaseCharacteristics struct {
 
 // DerivedCharacteristics are derived from base characteristics.
 type DerivedCharacteristics struct {
-	DamageBonus     int `json:"damage_bonus"`
-	HitPoints       int `json:"hit_points"`
-	MajorWoundLevel int `json:"major_wound_level"`
-	ExperienceBonus int `json:"experience_bonus"`
-	Move            int `json:"move"`
-	Sanity          int `json:"sanity"`
-	Effort          int `json:"effort"`
-	Endurance       int `json:"endurance"`
-	DamageMod       int `json:"damage_mod"`
-	Idea            int `json:"idea"`
-	Luck            int `json:"luck"`
-	Agility         int `json:"agility"`
-	Know            int `json:"know"`
+	DamageBonus     string `json:"damage_bonus"`
+	HitPoints       int    `json:"hit_points"`
+	MajorWoundLevel int    `json:"major_wound_level"`
+	ExperienceBonus int    `json:"experience_bonus"`
+	Move            int    `json:"move"`
+	Sanity          int    `json:"sanity"`
+	Effort          int    `json:"effort"`
+	Endurance       int    `json:"endurance"`
+	DamageMod       int    `json:"damage_mod"`
+	Idea            int    `json:"idea"`
+	Luck            int    `json:"luck"`
+	Agility         int    `json:"agility"`
+	Know            int    `json:"know"`
 }
 
 // Weapon represents properties of a given weapon.
@@ -88,18 +91,21 @@ type Weapon struct {
 }
 
 func (c *Character) rollBaseCharacteristics() {
-	c.Strength = Die(3, 6).roll()
-	c.Constitution = Die(3, 6).roll()
-	c.Size = Die(2, 6).roll() + 6
-	c.Intelligence = Die(2, 6).roll() + 6
-	c.Power = Die(3, 6).roll()
-	c.Dexterity = Die(3, 6).roll()
-	c.Charisma = Die(3, 6).roll()
-	c.Education = Die(3, 6).roll() + 3
+	threeD6 := Die{code: 3, sides: 6}
+	twoD6 := Die{code: 2, sides: 6}
+
+	c.Base.Strength = threeD6.roll()
+	c.Base.Constitution = threeD6.roll()
+	c.Base.Size = twoD6.roll() + 6
+	c.Base.Intelligence = twoD6.roll() + 6
+	c.Base.Power = threeD6.roll()
+	c.Base.Dexterity = threeD6.roll()
+	c.Base.Charisma = threeD6.roll()
+	c.Base.Education = threeD6.roll() + 3
 }
 
 func getDamageBonus(n int) (code string) {
-	switch n {
+	switch {
 	case n <= 12:
 		return "-1D6"
 	case n <= 16:
@@ -110,35 +116,36 @@ func getDamageBonus(n int) (code string) {
 		return "+1D4"
 	case n <= 40:
 		return "+1D6"
+	default:
+		return "+2D6"
 	}
-	return "+2D6"
 }
 
 func (c *Character) calcDerivedCharacteristics() {
-	c.DamageBonus = getDamageBonus(c.Strength + c.Size)
-	c.HitPoints = (c.Constitution + c.Size) / 2
-	c.MajorWoundLevel = c.HitPoints / 2
-	c.ExperienceBonus = c.Intelligence / 2
-	c.Move = 10
-	c.Sanity = c.Power
-	c.Effort = c.Strenth * 5
-	c.Endurance = c.Consitution * 5
-	c.Idea = c.Intelligence * 5
-	c.Luck = c.Power * 5
-	c.Agility = c.Dexterity * 5
-	c.Know = c.Education * 5
+	c.Derived.DamageBonus = getDamageBonus(c.Base.Strength + c.Base.Size)
+	c.Derived.HitPoints = (c.Base.Constitution + c.Base.Size) / 2
+	c.Derived.MajorWoundLevel = c.Derived.HitPoints / 2
+	c.Derived.ExperienceBonus = c.Base.Intelligence / 2
+	c.Derived.Move = 10
+	c.Derived.Sanity = c.Base.Power
+	c.Derived.Effort = c.Base.Strength * 5
+	c.Derived.Endurance = c.Base.Constitution * 5
+	c.Derived.Idea = c.Base.Intelligence * 5
+	c.Derived.Luck = c.Base.Power * 5
+	c.Derived.Agility = c.Base.Dexterity * 5
+	c.Derived.Know = c.Base.Education * 5
 }
 
 func (c *Character) getPersonalityType(opt string) {
-	if opt != nil {
-		c.personalityType = opt
+	if opt != "" {
+		c.PersonalityType = opt
 	} else {
-		c.personalityType = randomChoice(personalityTypes)
+		c.PersonalityType = randomChoice(personalityTypes)
 	}
 }
 
 func (c *Character) getProfession(opt string) {
-	if opt != nil {
+	if opt != "" {
 		c.Profession = opt
 	} else {
 		c.Profession = randomChoice(professions)
@@ -146,11 +153,25 @@ func (c *Character) getProfession(opt string) {
 }
 
 func (c *Character) getAssignment(opt string) {
-	if opt != nil {
+	if opt != "" {
 		c.Assignment = opt
 	} else {
 		c.Assignment = randomChoice(assignments)
 	}
+}
+
+func (c *Character) calcBaseSkills() {
+	c.Skills = make(map[string]Skill)
+	for _, skill := range PersonalityTypes[c.PersonalityType].skills {
+		if _, ok := Skills[skill]; !ok {
+			if skill == "COMBAT" {
+				skill = randomChoice(CombatSkills)
+			}
+		}
+		c.Skills[skill] = Skills[skill]
+		fmt.Println(skill, c.Skills[skill].value)
+	}
+
 }
 
 func (c *Character) rollSkills() {}
@@ -164,6 +185,14 @@ func (c *Character) setGender(gender string) {
 	}
 }
 
+func (c *Character) setName(name string) {
+	if name != "" {
+		c.Name = name
+	} else {
+		c.Name = "Anonymous"
+	}
+}
+
 // TODO: Additional character data functions.
 func (c *Character) setWeapons()                       {}
 func (c *Character) setEquipment()                     {}
@@ -174,7 +203,6 @@ func (c *Character) setBackground(background string)   {}
 func (c Character) Print() {
 	fmt.Println("Name\t" + c.Name)
 	fmt.Println("Gender\t" + c.Gender)
-	fmt.Println("Level\t", c.Level)
 	fmt.Println("Character Seed\t", c.Seed)
 	fmt.Println()
 }
@@ -187,7 +215,7 @@ func (c Character) ToJSON(pretty bool) string {
 	} else {
 		j, _ = json.Marshal(c)
 	}
-	fmt.Println(string(j))
+	//fmt.Println(string(j))
 	//err := ioutil.WriteFile(fn, j, 0644)
 	//if err != nil {
 	//	panic(err)
@@ -197,26 +225,20 @@ func (c Character) ToJSON(pretty bool) string {
 
 // Opts contains user input optionsr; used in CLI implementations.
 type Opts struct {
-	Name     string `docopt:"--name"`
-	Age      string
-	Gender   string `docopt:"--gender"`
-	LogLevel string `docopt:"--log-level"`
-	Seed     string `docopt:"--seed"`
+	Name            string `docopt:"--name"`
+	Age             string `docopt:"--age"`
+	Gender          string `docopt:"--gender"`
+	PersonalityType string `docopt:"--personality_type"`
+	Assignment      string `docopt:"--assignment"`
+	Profession      string `docopt:"--profession"`
+	LogLevel        string `docopt:"--log-level"`
+	Seed            string `docopt:"--seed"`
 }
 
 // NewCharacter generates a SotDL character given a set of user options.
 func NewCharacter(opts Opts) (c Character, err error) {
 
 	logging.SetLevel(logLevels[opts.LogLevel], "")
-
-	// Load the character db if empty.
-	if len(db.Paths) == 0 {
-		log.Info("Loading Character DB.")
-		db, err = NewCharDB(opts.DataFile, false)
-		if err != nil {
-			return c, err
-		}
-	}
 
 	// Initialize character and set random seed from hash
 	c.setCharSeed(opts.Seed)
@@ -230,6 +252,7 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	c.getPersonalityType(opts.PersonalityType)
 	c.getProfession(opts.Profession)
 	c.getAssignment(opts.Assignment)
+	c.calcBaseSkills()
 
 	// Generate stuff
 	//c.setWeapons()
@@ -238,7 +261,6 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	// Generate fluff
 	//c.setDescription(opts.Description)
 	//c.setBackground(opts.Background)
-	//c.setProfessions(opts.Professions)
 	//c.setLanguages(opts.Languages)
 
 	return c, nil

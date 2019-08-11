@@ -1,6 +1,7 @@
 package tlfgen
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -12,21 +13,14 @@ func TestNewCharacter(t *testing.T) {
 	}
 	opts := []Opts{
 		{
-			DataFile: "./assets/Shadow_of_the_Demon_Lord.pdf",
 			LogLevel: logLevel,
 		},
 		{
-			LogLevel: logLevel,
-		},
-		{
-			Name:       "Borkenhekenaken",
-			Gender:     "Male",
-			Ancestry:   "Goblin",
-			NovicePath: "Magician",
-			ExpertPath: "Wizard",
-			Seed:       "1575d911f49e59ee",
-			Level:      "3",
-			LogLevel:   logLevel,
+			Name:            "Borkenhekenaken",
+			Gender:          "Male",
+			PersonalityType: "Bruiser",
+			Seed:            "1575d911f49e59ee",
+			LogLevel:        logLevel,
 		},
 	}
 	for _, o := range opts {
@@ -41,8 +35,6 @@ func TestNewCharacter(t *testing.T) {
 			g := strings.Join(genders, ", ")
 			t.Errorf("Incorrect gender. Expected '%s' in '%s'.", c.Gender, g)
 		}
-		if c.Level < 0 {
-			t.Errorf("Incorrect Level. '%d' is less than zero.", c.Level)
-		}
+		fmt.Println(c.ToJSON(true))
 	}
 }
