@@ -96,11 +96,13 @@ func (c *Character) rollBaseCharacteristics() {
 
 	c.Base.Strength = threeD6.roll()
 	c.Base.Constitution = threeD6.roll()
-	c.Base.Size = twoD6.roll() + 6
-	c.Base.Intelligence = twoD6.roll() + 6
 	c.Base.Power = threeD6.roll()
 	c.Base.Dexterity = threeD6.roll()
 	c.Base.Charisma = threeD6.roll()
+
+	c.Base.Size = twoD6.roll() + 6
+	c.Base.Intelligence = twoD6.roll() + 6
+
 	c.Base.Education = threeD6.roll() + 3
 }
 
@@ -186,6 +188,13 @@ func (c *Character) calcAssignmentSkills() {
 			c.Skills[name] = newSkill.Value
 		}
 		c.Skills[name] += Assignments[c.Assignment].bonus
+	}
+	for _, name := range Assignments["all"].skills {
+		name, newSkill := getSkill(name)
+		if _, ok := c.Skills[name]; !ok {
+			c.Skills[name] = newSkill.Value
+		}
+		c.Skills[name] += Assignments["all"].bonus
 	}
 }
 

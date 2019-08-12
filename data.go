@@ -63,8 +63,8 @@ var Professions = map[string]Profession{
 			"Persuade",
 			"Research",
 			"Teach",
-			"Knowledge: *",
-			"Science: *",
+			"KNOWLEDGE",
+			"SCIENCE",
 		},
 		optOffset: 8,
 		optNum:    2,
@@ -180,6 +180,8 @@ func getSkill(name string) (string, Skill) {
 	switch name {
 	case "COMBAT":
 		name, newSkill = randomWeightedSkillChoice(CombatSkills)
+	case "FIREARM":
+		name, newSkill = randomWeightedSkillChoice(FirearmSkills)
 	case "KNOWLEDGE":
 		name, newSkill = randomWeightedSkillChoice(KnowledgeSkills)
 	case "CRAFT":
