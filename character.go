@@ -162,12 +162,10 @@ func (c *Character) getAssignment(opt string) {
 
 func (c *Character) calcBaseSkills() {
 	c.Skills = make(map[string]Skill)
-	for _, skill := range PersonalityTypes[c.PersonalityType].skills {
-		if _, ok := Skills[skill]; !ok {
-			if skill == "COMBAT" {
+	for _, skillName := range PersonalityTypes[c.PersonalityType].skills {
+
+	if skill == "COMBAT" {
 				skill = randomChoice(CombatSkills)
-			}
-		}
 		c.Skills[skill] = Skills[skill]
 		fmt.Println(skill, c.Skills[skill].value)
 	}
