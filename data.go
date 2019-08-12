@@ -73,6 +73,85 @@ var Professions = map[string]Profession{
 
 // PersonalityTypes is a map of PTypes.
 var PersonalityTypes = map[string]PersonalityType{
+	"Slacker": {
+		bonus: 20,
+		desc:  "Your character has spent their lifetime dodging responsibility and believes that problems are best avoided altogether.",
+		skills: []string{
+			"Bargain",
+			 "Bureaucracy",
+			 "Disguise",
+			 "Dodge",
+			 "Fast Talk",
+			 "Gaming",
+			 "Hide",
+			 "Insight",
+			 "LANGUAGE",
+			 "Persuade",
+			 "Sense",
+			 "Sleight of Hand",
+			 "Spot",
+		},
+		special: "",
+	},
+	"Leader": {
+		bonus: 20,
+		desc:  "Your character enjoys calling the shots and persuading others to work.",
+		skills: []string{
+			"Appraise",
+			 "Bargain",
+			 "COMBAT",
+			 "Command",
+			 "Etiquette",
+			 "Fast Talk",
+			 "Insight",
+			 "KNOWLEDGE",
+			 "LANGUAGE",
+			 "Language (Own)",
+			 "PERFORM",
+			 "Persuade",
+			 "Sense",
+		},
+		special: "",
+	},
+	"Thinker": {
+		bonus: 20,
+		desc:  "When confronted with opposition, your character’s first instinct is to outsmart their opponent to gain an advantage.",
+		skills: []string{
+			"Appraise",
+			 "Bargain",
+			 "COMBAT",
+			 "Disguise",
+			 "Insight",
+			 "KNOWLEDGE",
+			 "Listen",
+			 "Research",
+			 "Sense",
+			 "Spot",
+			 "Stealth",
+			 "TECHNICAL",
+		},
+		special: "",
+	},
+	"Master": {
+		bonus: 20,
+		desc:  "Your character believes that technique, craft and expertise are the keys to success.",
+		skills: []string{
+			"Appraise",
+			 "COMBAT",
+			 "CRAFT",
+			 "Disguise",
+			 "Dodge",
+			 "Fine Manipulation",
+			 "First Aid",
+			 "KNOWLEDGE",
+			 "Navigate",
+			 "PILOT",
+			 "Ride",
+			 "Sleight of Hand",
+			 "Stealth",
+			 },
+		special: "",
+	},
 	"Bruiser": {
 		bonus: 20,
 		desc:  "Your character believes that solving problems is best handled through quick application of physical force.",
@@ -194,6 +273,10 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(PerformSkills)
 	case "ART":
 		name, newSkill = randomWeightedSkillChoice(ArtSkills)
+	case "TECHNICAL":
+		name, newSkill = randomWeightedSkillChoice(TechnicalSkills)
+	case "COMPUTER":
+		name, newSkill = randomWeightedSkillChoice(ComputerUseSkills)
 	case "DRIVE":
 		name, newSkill = randomWeightedSkillChoice(DriveSkills)
 	case "":
@@ -272,6 +355,12 @@ var MissileWeaponSkills = map[string]Skill{
 	"Missile Weapon: Throwing Axe":   {Value: 5, weight: 1},
 	"Missile Weapon: Throwing Knife": {Value: 5, weight: 10},
 }
+
+// TechnicalSkills list of all the possible combat skills.
+var TechnicalSkills = joinMaps(
+	ComputerUseSkills,
+	TechnologyUseSkills,
+)
 
 // CombatSkills list of all the possible combat skills.
 var CombatSkills = joinMaps(

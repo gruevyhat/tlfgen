@@ -31,7 +31,7 @@ func (c *Character) setCharSeed(charSeed string) {
 var (
 	genders          = []string{"Male", "Female"}
 	assignments      = []string{"Archives", "Computational Demonology"}
-	personalityTypes = []string{"Bruiser", "Nutter"}
+	personalityTypes = []string{"Bruiser", "Nutter", "Master", "Leader", "Slacker", "Thinker"}
 	professions      = []string{"Occultist", "Philosopher"}
 	languages        = []string{"English", "French", "Spanish", "German", "Latin", "Ancient Greek", "Arabic", "Enochian"}
 )
