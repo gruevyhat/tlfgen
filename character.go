@@ -44,7 +44,7 @@ type Character struct {
 	PersonalityType string                 `json:"personality_type"`
 	Assignment      string                 `json:"assignment"`
 	Profession      string                 `json:"profession"`
-	Skills          map[string]Skill       `json:"skills"`
+	Skills          map[string]int         `json:"skills"`
 	Seed            string                 `json:"seed"`
 	Base            BaseCharacteristics    `json:"base"`
 	Derived         DerivedCharacteristics `json:"derived"`
@@ -161,15 +161,32 @@ func (c *Character) getAssignment(opt string) {
 }
 
 func (c *Character) calcBaseSkills() {
-	c.Skills = make(map[string]Skill)
-	for _, skillName := range PersonalityTypes[c.PersonalityType].skills {
-
-	if skill == "COMBAT" {
-				skill = randomChoice(CombatSkills)
-		c.Skills[skill] = Skills[skill]
-		fmt.Println(skill, c.Skills[skill].value)
+	c.Skills = make(map[string]int)
+	for name, skill := range DefaultSkills {
+		c.Skills[name] = skill.Value
 	}
+	c.Skills["Language: Own"] = c.Base.Intelligence * 5
+	c.Skills["Dodge"] = c.Base.Dexterity * 2
+}
 
+func (c *Character) calcPersonalitySkills() {
+	for _, name := range PersonalityTypes[c.PersonalityType].skills {
+		name, newSkill := getSkill(name)
+		if _, ok := c.Skills[name]; !ok {
+			c.Skills[name] = newSkill.Value
+		}
+		c.Skills[name] += PersonalityTypes[c.PersonalityType].bonus
+	}
+}
+
+func (c *Character) calcAssignmentSkills() {
+	for _, name := range Assignments[c.Assignment].skills {
+		name, newSkill := getSkill(name)
+		if _, ok := c.Skills[name]; !ok {
+			c.Skills[name] = newSkill.Value
+		}
+		c.Skills[name] += Assignments[c.Assignment].bonus
+	}
 }
 
 func (c *Character) rollSkills() {}
@@ -251,6 +268,8 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	c.getProfession(opts.Profession)
 	c.getAssignment(opts.Assignment)
 	c.calcBaseSkills()
+	c.calcPersonalitySkills()
+	c.calcAssignmentSkills()
 
 	// Generate stuff
 	//c.setWeapons()

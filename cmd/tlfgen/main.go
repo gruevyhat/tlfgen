@@ -9,7 +9,7 @@ import (
 	"github.com/gruevyhat/tlfgen"
 )
 
-var usage = `SotDL Character Generator
+var usage = `The Laundry Files Character Generator
 
 Usage: tlf [options]
 
@@ -31,5 +31,5 @@ func main() {
 		fmt.Println("An error has occurred. Aborting.")
 		os.Exit(1)
 	}
-	c.ToJSON(true)
+	fmt.Println(c.ToJSON(true))
 }

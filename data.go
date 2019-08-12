@@ -2,12 +2,12 @@ package tlfgen
 
 // Skill is a single skill.
 type Skill struct {
-	value  int
+	Value  int `json:"value"`
 	weight int
 }
 
-func (s *Skill) add(n int) {
-	s.value += n
+func (s Skill) add(n int) {
+	s.Value += n
 }
 
 // PersonalityType is a list of skill names and a starting bonus.
@@ -41,11 +41,11 @@ var Professions = map[string]Profession{
 			"Knowledge: Anthropology",
 			"Knowledge: History",
 			"Knowledge: Occult",
-			"Language: *",
+			"LANGUAGE",
 			"Language: Own",
 			"Research",
 			"Computer Use: *",
-			"Craft: *",
+			"CRAFT",
 			"Knowledge: Archaeology",
 			"Medicine",
 			"Science: any",
@@ -58,7 +58,7 @@ var Professions = map[string]Profession{
 			"Insight",
 			"Knowledge: History",
 			"Knowledge: Philosophy",
-			"Language: *",
+			"LANGUAGE",
 			"Language: Own",
 			"Persuade",
 			"Research",
@@ -101,11 +101,11 @@ var PersonalityTypes = map[string]PersonalityType{
 			"Fast Talk",
 			"Hide",
 			"Insight",
-			"Knowledge: *",
-			"Knowledge: *",
+			"KNOWLEDGE",
+			"KNOWLEDGE",
 			"Research",
-			"Science: *",
-			"Science: *",
+			"SCIENCE",
+			"SCIENCE",
 			"Sense",
 			"Spot",
 			"Stealth",
@@ -121,8 +121,8 @@ var Assignments = map[string]Assignment{
 		bonus: 10,
 		skills: []string{
 			"Bureaucracy",
-			"Knowledge: *",
-			"Knowledge: *",
+			"KNOWLEDGE",
+			"KNOWLEDGE",
 			"Navigate",
 			"Research",
 			"Stealth",
@@ -131,7 +131,7 @@ var Assignments = map[string]Assignment{
 	"Computational Demonology": Assignment{
 		bonus: 10,
 		skills: []string{
-			"Computer Use: *",
+			"COMPUTER USE",
 			"Computer Use: Magic",
 			"Science: Mathematics",
 			"Science: Thaumaturgy",
@@ -144,7 +144,7 @@ var Assignments = map[string]Assignment{
 			"Bureaucracy",
 			"Computer Use",
 			"Fine Manipulation",
-			"Firearm: *",
+			"FIREARM",
 			"Knowledge: Accounting",
 			"Knowledge: Espionage",
 			"Knowledge: Law",
@@ -155,259 +155,374 @@ var Assignments = map[string]Assignment{
 	},
 }
 
+func randomSkillChoice(skills map[string]Skill) (string, Skill) {
+	names := make([]string, len(skills))
+	for k := range skills {
+		names = append(names, k)
+	}
+	name := randomChoice(names)
+	return name, skills[name]
+}
+
+func randomWeightedSkillChoice(skills map[string]Skill) (string, Skill) {
+	names := make([]string, len(skills))
+	weights := make([]int, len(skills))
+	for name, skill := range skills {
+		names = append(names, name)
+		weights = append(weights, skill.weight)
+	}
+	name := weightedRandomChoice(names, weights)
+	return name, skills[name]
+}
+
+func getSkill(name string) (string, Skill) {
+	var newSkill Skill
+	switch name {
+	case "COMBAT":
+		name, newSkill = randomWeightedSkillChoice(CombatSkills)
+	case "KNOWLEDGE":
+		name, newSkill = randomWeightedSkillChoice(KnowledgeSkills)
+	case "CRAFT":
+		name, newSkill = randomWeightedSkillChoice(CraftSkills)
+	case "LANGUAGE":
+		name, newSkill = randomWeightedSkillChoice(LanguageSkills)
+	case "SCIENCE":
+		name, newSkill = randomWeightedSkillChoice(ScienceSkills)
+	case "PERFORM":
+		name, newSkill = randomWeightedSkillChoice(PerformSkills)
+	case "ART":
+		name, newSkill = randomWeightedSkillChoice(ArtSkills)
+	case "DRIVE":
+		name, newSkill = randomWeightedSkillChoice(DriveSkills)
+	case "":
+		fallthrough
+	default:
+		newSkill = GeneralSkills[name]
+	}
+	return name, newSkill
+}
+
+func joinMaps(maps ...map[string]Skill) map[string]Skill {
+	newMap := make(map[string]Skill)
+	for _, m := range maps {
+		for name, skill := range m {
+			newMap[name] = skill
+		}
+	}
+	return newMap
+}
+
+// ArtillerySkills is a map of skills.
+var ArtillerySkills = map[string]Skill{
+	"Artillery: Cannon":           Skill{Value: 0, weight: 1},
+	"Artillery: Other":            Skill{Value: 0, weight: 1},
+	"Artillery: Rocket Launcher":  Skill{Value: 0, weight: 1},
+	"Artillery: Turret":           Skill{Value: 0, weight: 1},
+	"Artillery: Vehicular Weapon": Skill{Value: 0, weight: 1},
+}
+
+// FirearmSkills is a map of skills.
+var FirearmSkills = map[string]Skill{
+	"Firearm: Assault Rifle":  Skill{Value: 15, weight: 5},
+	"Firearm: Esoteric":       Skill{Value: 0, weight: 5},
+	"Firearm: Exotic":         Skill{Value: 5, weight: 1},
+	"Firearm: Pistol":         Skill{Value: 20, weight: 50},
+	"Firearm: Rifle":          Skill{Value: 25, weight: 20},
+	"Firearm: Shotgun":        Skill{Value: 30, weight: 20},
+	"Firearm: Submachine Gun": Skill{Value: 15, weight: 1},
+}
+
+// HeavyWeaponSkills is a map of skills.
+var HeavyWeaponSkills = map[string]Skill{
+	"Heavy Weapon: Bazooka":           Skill{Value: 0, weight: 1},
+	"Heavy Weapon: Grenade Launcher":  Skill{Value: 0, weight: 1},
+	"Heavy Weapon: Heavy Machine Gun": Skill{Value: 0, weight: 1},
+	"Heavy Weapon: Minigun":           Skill{Value: 0, weight: 1},
+	"Heavy Weapon: Other":             Skill{Value: 0, weight: 1},
+	"Heavy Weapon: Rocket Launcher":   Skill{Value: 0, weight: 1},
+}
+
+// MeleeWeaponSkills is a map of skills.
+var MeleeWeaponSkills = map[string]Skill{
+	"Melee Weapon: Axe":     Skill{Value: 5, weight: 5},
+	"Melee Weapon: Club":    Skill{Value: 5, weight: 10},
+	"Melee Weapon: Garrote": Skill{Value: 5, weight: 1},
+	"Melee Weapon: Knife":   Skill{Value: 5, weight: 20},
+	"Melee Weapon: Other":   Skill{Value: 5, weight: 1},
+	"Melee Weapon: Spear":   Skill{Value: 5, weight: 1},
+	"Melee Weapon: Staff":   Skill{Value: 5, weight: 5},
+	"Melee Weapon: Sword":   Skill{Value: 5, weight: 5},
+	"Melee Weapon: Whip":    Skill{Value: 5, weight: 1},
+}
+
+// MissileWeaponSkills is a map of skills.
+var MissileWeaponSkills = map[string]Skill{
+	"Missile Weapon: Blowgun":        Skill{Value: 5, weight: 1},
+	"Missile Weapon: Boomerang":      Skill{Value: 5, weight: 1},
+	"Missile Weapon: Bow":            Skill{Value: 5, weight: 20},
+	"Missile Weapon: Crossbow":       Skill{Value: 5, weight: 1},
+	"Missile Weapon: Dart":           Skill{Value: 5, weight: 1},
+	"Missile Weapon: Javelin":        Skill{Value: 5, weight: 1},
+	"Missile Weapon: Other":          Skill{Value: 5, weight: 1},
+	"Missile Weapon: Shuriken":       Skill{Value: 5, weight: 1},
+	"Missile Weapon: Sling":          Skill{Value: 5, weight: 1},
+	"Missile Weapon: Spear":          Skill{Value: 5, weight: 1},
+	"Missile Weapon: Throwing Axe":   Skill{Value: 5, weight: 1},
+	"Missile Weapon: Throwing Knife": Skill{Value: 5, weight: 10},
+}
+
 // CombatSkills list of all the possible combat skills.
-var CombatSkills = []string{
-	"Artillery: Cannon",
-	"Artillery: Cannon",
-	"Artillery: Other",
-	"Artillery: Rocket Launcher",
-	"Artillery: Turret",
-	"Artillery: Vehicular Weapon",
-	"Artillery: Other",
-	"Artillery: Rocket Launcher",
-	"Artillery: Turret",
-	"Artillery: Vehicular Weapon",
-	"Firearm: Assault Rifle",
-	"Firearm: Esoteric",
-	"Firearm: Exotic",
-	"Firearm: Pistol",
-	"Firearm: Rifle",
-	"Firearm: Shotgun",
-	"Firearm: Submachine Gun",
-	"Heavy Weapon: Bazooka",
-	"Heavy Weapon: Grenade Launcher",
-	"Heavy Weapon: Heavy Machine Gun",
-	"Heavy Weapon: Minigun",
-	"Heavy Weapon: Other",
-	"Heavy Weapon: Rocket Launcher",
-	"Melee Weapon: Axe",
-	"Melee Weapon: Club",
-	"Melee Weapon: Garrote",
-	"Melee Weapon: Knife",
-	"Melee Weapon: Other",
-	"Melee Weapon: Spear",
-	"Melee Weapon: Staff",
-	"Melee Weapon: Sword",
-	"Melee Weapon: Whip",
-	"Missile Weapon: Archery",
-	"Missile Weapon: Blowgun",
-	"Missile Weapon: Boomerang",
-	"Missile Weapon: Bow",
-	"Missile Weapon: Crossbow",
-	"Missile Weapon: Dart",
-	"Missile Weapon: Javelin",
-	"Missile Weapon: Other",
-	"Missile Weapon: Shuriken",
-	"Missile Weapon: Sling",
-	"Missile Weapon: Spear",
-	"Missile Weapon: Throwing Axe",
-	"Missile Weapon: Throwing Knife",
+var CombatSkills = joinMaps(
+	ArtillerySkills,
+	FirearmSkills,
+	HeavyWeaponSkills,
+	MeleeWeaponSkills,
+	MissileWeaponSkills,
+)
+
+// DefaultSkills is a map of default skills.
+var DefaultSkills = map[string]Skill{
+	"Appraise":          Skill{Value: 15, weight: 1},
+	"Art":               Skill{Value: 5, weight: 1},
+	"Athletics":         Skill{Value: 10, weight: 1},
+	"Bargain":           Skill{Value: 5, weight: 1},
+	"Brawl":             Skill{Value: 25, weight: 1},
+	"Bureaucracy":       Skill{Value: 5, weight: 1},
+	"Climb":             Skill{Value: 40, weight: 1},
+	"Command":           Skill{Value: 5, weight: 1},
+	"Computer Use":      Skill{Value: 5, weight: 1},
+	"Craft":             Skill{Value: 5, weight: 1},
+	"Demolition":        Skill{Value: 1, weight: 1},
+	"Disguise":          Skill{Value: 5, weight: 1},
+	"Dodge":             Skill{Value: -1, weight: 10},
+	"Drive":             Skill{Value: 20, weight: 1},
+	"Etiquette":         Skill{Value: 5, weight: 1},
+	"Fast Talk":         Skill{Value: 5, weight: 1},
+	"Fine Manipulation": Skill{Value: 5, weight: 1},
+	"First Aid":         Skill{Value: 30, weight: 1},
+	"Gaming":            Skill{Value: 10, weight: 1},
+	"Geology":           Skill{Value: 0, weight: 1},
+	"Grapple":           Skill{Value: 25, weight: 1},
+	"Heavy Machine":     Skill{Value: 5, weight: 1},
+	"Hide":              Skill{Value: 10, weight: 1},
+	"Insight":           Skill{Value: 5, weight: 1},
+	"Jump":              Skill{Value: 25, weight: 1},
+	"Language: Own":     Skill{Value: -1, weight: 1},
+	"Listen":            Skill{Value: 25, weight: 1},
+	"Medicine":          Skill{Value: 5, weight: 1},
+	"Navigate":          Skill{Value: 10, weight: 1},
+	"Perform":           Skill{Value: 5, weight: 1},
+	"Persuade":          Skill{Value: 15, weight: 1},
+	"Research":          Skill{Value: 25, weight: 10},
+	"Ride":              Skill{Value: 5, weight: 1},
+	"Science":           Skill{Value: 1, weight: 1},
+	"Sense":             Skill{Value: 10, weight: 1},
+	"Sleight of Hand":   Skill{Value: 5, weight: 1},
+	"Spot":              Skill{Value: 25, weight: 10},
+	"Status":            Skill{Value: 15, weight: 1},
+	"Stealth":           Skill{Value: 10, weight: 1},
+	"Strategy":          Skill{Value: 5, weight: 1},
+	"Swim":              Skill{Value: 25, weight: 1},
+	"Teach":             Skill{Value: 10, weight: 1},
+	"Technology Use":    Skill{Value: 5, weight: 1},
+	"Throw":             Skill{Value: 25, weight: 1},
+	"Track":             Skill{Value: 10, weight: 1},
 }
 
-var CombatSkills = []string{
-	"Artillery: Cannon":                         Skill{value: 0},
-	"Artillery: Other":                          Skill{value: 0},
-	"Artillery: Rocket Launcher":                Skill{value: 0},
-	"Artillery: Turret":                         Skill{value: 0},
-	"Artillery: Vehicular Weapon":               Skill{value: 0},
-	"Firearm: Assault Rifle":                    Skill{value: 15, weight: 5},
-	"Firearm: Esoteric":                         Skill{value: 0, weight: 5},
-	"Firearm: Exotic":                           Skill{value: 5},
-	"Firearm: Pistol":                           Skill{value: 20, weight: 50},
-	"Firearm: Rifle":                            Skill{value: 25, weight: 20},
-	"Firearm: Shotgun":                          Skill{value: 30, weight: 20},
-	"Firearm: Submachine Gun":                   Skill{value: 15},
-	"Heavy Weapon: Bazooka":                     Skill{value: 0},
-	"Heavy Weapon: Grenade Launcher":            Skill{value: 0},
-	"Heavy Weapon: Heavy Machine Gun":           Skill{value: 0},
-	"Heavy Weapon: Minigun":                     Skill{value: 0},
-	"Heavy Weapon: Other":                       Skill{value: 0},
-	"Heavy Weapon: Rocket Launcher":             Skill{value: 0},
-	"Melee Weapon: Axe":              Skill{value: 5, weight: 5},
-	"Melee Weapon: Club":             Skill{value: 5, weight: 10},
-	"Melee Weapon: Garrote":          Skill{value: 5},
-	"Melee Weapon: Knife":            Skill{value: 5, weight: 20},
-	"Melee Weapon: Other":            Skill{value: 5},
-	"Melee Weapon: Spear":            Skill{value: 5},
-	"Melee Weapon: Staff":            Skill{value: 5, weight: 5},
-	"Melee Weapon: Sword":            Skill{value: 5, weight: 5},
-	"Melee Weapon: Whip":             Skill{value: 5},
-	"Missile Weapon: Blowgun":        Skill{value: 5},
-	"Missile Weapon: Boomerang":      Skill{value: 5},
-	"Missile Weapon: Bow":            Skill{value: 5, weight: 20},
-	"Missile Weapon: Crossbow":       Skill{value: 5},
-	"Missile Weapon: Dart":           Skill{value: 5},
-	"Missile Weapon: Javelin":        Skill{value: 5},
-	"Missile Weapon: Other":          Skill{value: 5},
-	"Missile Weapon: Shuriken":       Skill{value: 5},
-	"Missile Weapon: Sling":          Skill{value: 5},
-	"Missile Weapon: Spear":          Skill{value: 5},
-	"Missile Weapon: Throwing Axe":   Skill{value: 5},
-	"Missile Weapon: Throwing Knife": Skill{value: 5, weight: 10},
-
-
-
-// Skills is a master map of skills.
-var GeneralSkills = map[string]Skill{
-	"Appraise":                                  Skill{value: 15},
-	"Art: Calligraphy":                          Skill{value: 5},
-	"Art: Drawing":                              Skill{value: 5},
-	"Art: Other":                                Skill{value: 5},
-	"Art: Painting":                             Skill{value: 5},
-	"Art: Photography":                          Skill{value: 5},
-	"Art: Sculpture":                            Skill{value: 5},
-	"Art: Writing":                              Skill{value: 5},
-	"Athletics: Acrobatics":                     Skill{value: 10},
-	"Athletics: American and Canadian Football": Skill{value: 10},
-	"Athletics: Baseball":                       Skill{value: 10},
-	"Athletics: Basketball":                     Skill{value: 10},
-	"Athletics: Bowling":                        Skill{value: 10},
-	"Athletics: Cricket":                        Skill{value: 10},
-	"Athletics: Cycling":                        Skill{value: 10},
-	"Athletics: Golf":                           Skill{value: 10},
-	"Athletics: Hockey":                         Skill{value: 10},
-	"Athletics: Rugby":                          Skill{value: 10},
-	"Athletics: Skating":                        Skill{value: 10},
-	"Athletics: Skiing":                         Skill{value: 10},
-	"Athletics: Soccer":                         Skill{value: 10},
-	"Athletics: Tennis":                         Skill{value: 10},
-	"Athletics: Track & Field":                  Skill{value: 10},
-	"Bargain":                                   Skill{value: 5},
-	"Brawl":                                     Skill{value: 25},
-	"Bureaucracy":                               Skill{value: 5},
-	"Climb":                                     Skill{value: 40},
-	"Command":                                   Skill{value: 5},
-	"Computer Use: Art":                         Skill{value: 5},
-	"Computer Use: Design":                      Skill{value: 5},
-	"Computer Use: Gaming":                      Skill{value: 5},
-	"Computer Use: Hacking":                     Skill{value: 5},
-	"Computer Use: Magic":                       Skill{value: 5},
-	"Computer Use: Maintenance":                 Skill{value: 5},
-	"Computer Use: Other":                       Skill{value: 5},
-	"Computer Use: Programming":                 Skill{value: 5},
-	"Computer Use: Repair":                      Skill{value: 5},
-	"Craft: Carpentry":                          Skill{value: 5},
-	"Craft: Cooking":                            Skill{value: 5},
-	"Craft: Leatherworking":                     Skill{value: 5},
-	"Craft: Pottery":                            Skill{value: 5},
-	"Craft: Sewing":                             Skill{value: 5},
-	"Craft: Woodworking":                        Skill{value: 5},
-	"Cthulhu Mythos":                            Skill{value: 0},
-	"Demolition":                                Skill{value: 1},
-	"Disguise":                                  Skill{value: 5},
-	"Dodge":                                     Skill{value: -1, weight: 10},
-	"Drive: Automobile":                         Skill{value: 20},
-	"Drive: Industrial Mover":                   Skill{value: 20},
-	"Drive: Motorcycle":                         Skill{value: 20},
-	"Drive: Other":                              Skill{value: 20},
-	"Drive: Tank":                               Skill{value: 20},
-	"Etiquette":                                 Skill{value: 5},
-	"Fast Talk":                                 Skill{value: 5},
-	"Fine Manipulation":                         Skill{value: 5},
-	"First Aid":                                 Skill{value: 30},
-	"Gaming":                                    Skill{value: 10},
-	"Geology":                                   Skill{value: 0},
-	"Grapple":                                   Skill{value: 25},
-	"Heavy Machine: Boiler":                     Skill{value: 5},
-	"Heavy Machine: Bulldozer":                  Skill{value: 5},
-	"Heavy Machine: Crane":                      Skill{value: 5},
-	"Heavy Machine: Engine":                     Skill{value: 5},
-	"Heavy Machine: Other":                      Skill{value: 5},
-	"Heavy Machine: Turbine":                    Skill{value: 5},
-	"Heavy Machine: Wrecker":                    Skill{value: 5},
-	"Hide":                           Skill{value: 10},
-	"Insight":                        Skill{value: 5},
-	"Jump":                           Skill{value: 25},
-	"Knowledge: Accounting":          Skill{value: 10},
-	"Knowledge: Anthropology":        Skill{value: 1},
-	"Knowledge: Archaeology":         Skill{value: 1},
-	"Knowledge: Art History":         Skill{value: 1},
-	"Knowledge: Business":            Skill{value: 1},
-	"Knowledge: Espionage":           Skill{value: 0},
-	"Knowledge: Folklore":            Skill{value: 5},
-	"Knowledge: Group":               Skill{value: 0},
-	"Knowledge: History":             Skill{value: 20},
-	"Knowledge: Law":                 Skill{value: 5},
-	"Knowledge: Linguistics":         Skill{value: 0},
-	"Knowledge: Literature":          Skill{value: 5},
-	"Knowledge: Natural History":     Skill{value: 10},
-	"Knowledge: Occult":              Skill{value: 5},
-	"Knowledge: Philosophy":          Skill{value: 1},
-	"Knowledge: Politics":            Skill{value: 5},
-	"Knowledge: Region":              Skill{value: 0},
-	"Knowledge: Religion":            Skill{value: 5},
-	"Knowledge: Streetwise":          Skill{value: 5},
-	"Language: A":                    Skill{value: 0},
-	"Language: B":                    Skill{value: 0},
-	"Language: C":                    Skill{value: 0},
-	"Language: D":                    Skill{value: 0},
-	"Language: E":                    Skill{value: 0},
-	"Language: Own":                  Skill{value: -1},
-	"Listen":                         Skill{value: 25},
-	"Medicine: Dermatology":          Skill{value: 5},
-	"Medicine: Family Medicine":      Skill{value: 5},
-	"Medicine: Immunology":           Skill{value: 5},
-	"Medicine: Internal Medicine":    Skill{value: 5},
-	"Medicine: Neurology":            Skill{value: 5},
-	"Medicine: Nuclear Medicine":     Skill{value: 5},
-	"Medicine: Oncology":             Skill{value: 5},
-	"Medicine: Other":                Skill{value: 5},
-	"Medicine: Pathology":            Skill{value: 5},
-	"Medicine: Pediatrics":           Skill{value: 5},
-	"Medicine: Radiology":            Skill{value: 5},
-	"Medicine: Surgery":              Skill{value: 5},
-	"Navigate":                       Skill{value: 10},
-	"Perform: Act":                   Skill{value: 5},
-	"Perform: Dance":                 Skill{value: 5},
-	"Perform: Juggle":                Skill{value: 5},
-	"Perform: Other":                 Skill{value: 5},
-	"Perform: Play Instrument":       Skill{value: 5},
-	"Perform: Recite":                Skill{value: 5},
-	"Perform: Sing":                  Skill{value: 5},
-	"Persuade":                       Skill{value: 15},
-	"Pilot: Battleship":              Skill{value: 0},
-	"Pilot: Helicopter":              Skill{value: 0},
-	"Pilot: Hot Air Balloon":         Skill{value: 0},
-	"Pilot: Hovercraft":              Skill{value: 0},
-	"Pilot: Jet Airliner":            Skill{value: 0},
-	"Pilot: Jet Boat":                Skill{value: 0},
-	"Pilot: Jet Fighter":             Skill{value: 0},
-	"Pilot: Ocean Liner":             Skill{value: 0},
-	"Pilot: Propeller Plane":         Skill{value: 0},
-	"Research":                       Skill{value: 25, weight: 10},
-	"Ride":                           Skill{value: 5},
-	"Science: Astronomy":             Skill{value: 1},
-	"Science: Biology":               Skill{value: 1},
-	"Science: Botany":                Skill{value: 1},
-	"Science: Chemistry":             Skill{value: 1},
-	"Science: Cyptography":           Skill{value: 1},
-	"Science: Forensics":             Skill{value: 1},
-	"Science: Genetics":              Skill{value: 1},
-	"Science: Geology":               Skill{value: 1},
-	"Science: Mathematics":           Skill{value: 10},
-	"Science: Meteorology":           Skill{value: 1},
-	"Science: Pharmacy":              Skill{value: 1},
-	"Science: Physics":               Skill{value: 1},
-	"Science: Planetology":           Skill{value: 1},
-	"Science: Psychology":            Skill{value: 5},
-	"Science: Thaumaturgy":           Skill{value: 0},
-	"Science: Zoology":               Skill{value: 5},
-	"Sense":                          Skill{value: 10},
-	"Sleight of Hand":                Skill{value: 5},
-	"Sorcery":                        Skill{value: 0},
-	"Spot":                           Skill{value: 25, weight: 10},
-	"Status":                         Skill{value: 15},
-	"Stealth":                        Skill{value: 10},
-	"Strategy":                       Skill{value: 5},
-	"Swim":                           Skill{value: 25},
-	"Teach":                          Skill{value: 10},
-	"Technology Use: Communications":      Skill{value: 5},
-	"Technology Use: Electronic Security": Skill{value: 5},
-	"Technology Use: Electronics":         Skill{value: 5},
-	"Technology Use: Other":               Skill{value: 5},
-	"Technology Use: Sensor Systems":      Skill{value: 5},
-	"Technology Use: Surveillance":        Skill{value: 5},
-	"Technology Use: Traps":               Skill{value: 5},
-	"Throw":                               Skill{value: 25},
-	"Track":                               Skill{value: 10},
+// ArtSkills is a map of skills.
+var ArtSkills = map[string]Skill{
+	"Art: Calligraphy": Skill{Value: 5, weight: 1},
+	"Art: Drawing":     Skill{Value: 5, weight: 1},
+	"Art: Other":       Skill{Value: 5, weight: 1},
+	"Art: Painting":    Skill{Value: 5, weight: 1},
+	"Art: Photography": Skill{Value: 5, weight: 1},
+	"Art: Sculpture":   Skill{Value: 5, weight: 1},
+	"Art: Writing":     Skill{Value: 5, weight: 1},
 }
+
+// AthleticsSkills is a map of skills.
+var AthleticsSkills = map[string]Skill{
+	"Athletics: Acrobatics":                     Skill{Value: 10, weight: 1},
+	"Athletics: American and Canadian Football": Skill{Value: 10, weight: 1},
+	"Athletics: Baseball":                       Skill{Value: 10, weight: 1},
+	"Athletics: Basketball":                     Skill{Value: 10, weight: 1},
+	"Athletics: Bowling":                        Skill{Value: 10, weight: 1},
+	"Athletics: Cricket":                        Skill{Value: 10, weight: 1},
+	"Athletics: Cycling":                        Skill{Value: 10, weight: 1},
+	"Athletics: Golf":                           Skill{Value: 10, weight: 1},
+	"Athletics: Hockey":                         Skill{Value: 10, weight: 1},
+	"Athletics: Rugby":                          Skill{Value: 10, weight: 1},
+	"Athletics: Skating":                        Skill{Value: 10, weight: 1},
+	"Athletics: Skiing":                         Skill{Value: 10, weight: 1},
+	"Athletics: Soccer":                         Skill{Value: 10, weight: 1},
+	"Athletics: Tennis":                         Skill{Value: 10, weight: 1},
+	"Athletics: Track & Field":                  Skill{Value: 10, weight: 1},
+}
+
+// ComputerUseSkills is a map of skills.
+var ComputerUseSkills = map[string]Skill{
+	"Computer Use: Art":         Skill{Value: 5, weight: 1},
+	"Computer Use: Design":      Skill{Value: 5, weight: 1},
+	"Computer Use: Gaming":      Skill{Value: 5, weight: 1},
+	"Computer Use: Hacking":     Skill{Value: 5, weight: 1},
+	"Computer Use: Magic":       Skill{Value: 5, weight: 1},
+	"Computer Use: Maintenance": Skill{Value: 5, weight: 1},
+	"Computer Use: Other":       Skill{Value: 5, weight: 1},
+	"Computer Use: Programming": Skill{Value: 5, weight: 1},
+	"Computer Use: Repair":      Skill{Value: 5, weight: 1},
+}
+
+// CraftSkills is a map of skills.
+var CraftSkills = map[string]Skill{
+	"Craft: Carpentry":      Skill{Value: 5, weight: 1},
+	"Craft: Cooking":        Skill{Value: 5, weight: 1},
+	"Craft: Leatherworking": Skill{Value: 5, weight: 1},
+	"Craft: Pottery":        Skill{Value: 5, weight: 1},
+	"Craft: Sewing":         Skill{Value: 5, weight: 1},
+	"Craft: Woodworking":    Skill{Value: 5, weight: 1},
+}
+
+// DriveSkills is a map of skills.
+var DriveSkills = map[string]Skill{
+	"Drive: Automobile":       Skill{Value: 20, weight: 1},
+	"Drive: Industrial Mover": Skill{Value: 20, weight: 1},
+	"Drive: Motorcycle":       Skill{Value: 20, weight: 1},
+	"Drive: Other":            Skill{Value: 20, weight: 1},
+	"Drive: Tank":             Skill{Value: 20, weight: 1},
+}
+
+// HeavyMachineSkills is a map of skills.
+var HeavyMachineSkills = map[string]Skill{
+	"Heavy Machine: Boiler":    Skill{Value: 5, weight: 1},
+	"Heavy Machine: Bulldozer": Skill{Value: 5, weight: 1},
+	"Heavy Machine: Crane":     Skill{Value: 5, weight: 1},
+	"Heavy Machine: Engine":    Skill{Value: 5, weight: 1},
+	"Heavy Machine: Other":     Skill{Value: 5, weight: 1},
+	"Heavy Machine: Turbine":   Skill{Value: 5, weight: 1},
+	"Heavy Machine: Wrecker":   Skill{Value: 5, weight: 1},
+}
+
+// KnowledgeSkills is a map of skills.
+var KnowledgeSkills = map[string]Skill{
+	"Knowledge: Accounting":      Skill{Value: 10, weight: 1},
+	"Knowledge: Anthropology":    Skill{Value: 1, weight: 1},
+	"Knowledge: Archaeology":     Skill{Value: 1, weight: 1},
+	"Knowledge: Art History":     Skill{Value: 1, weight: 1},
+	"Knowledge: Business":        Skill{Value: 1, weight: 1},
+	"Knowledge: Espionage":       Skill{Value: 0, weight: 1},
+	"Knowledge: Folklore":        Skill{Value: 5, weight: 1},
+	"Knowledge: Group":           Skill{Value: 0, weight: 1},
+	"Knowledge: History":         Skill{Value: 20, weight: 1},
+	"Knowledge: Law":             Skill{Value: 5, weight: 1},
+	"Knowledge: Linguistics":     Skill{Value: 0, weight: 1},
+	"Knowledge: Literature":      Skill{Value: 5, weight: 1},
+	"Knowledge: Natural History": Skill{Value: 10, weight: 1},
+	"Knowledge: Occult":          Skill{Value: 5, weight: 1},
+	"Knowledge: Philosophy":      Skill{Value: 1, weight: 1},
+	"Knowledge: Politics":        Skill{Value: 5, weight: 1},
+	"Knowledge: Region":          Skill{Value: 0, weight: 1},
+	"Knowledge: Religion":        Skill{Value: 5, weight: 1},
+	"Knowledge: Streetwise":      Skill{Value: 5, weight: 1},
+}
+
+// MedicineSkills is a map of skills.
+var MedicineSkills = map[string]Skill{
+	"Medicine: Dermatology":       Skill{Value: 5, weight: 1},
+	"Medicine: Family Medicine":   Skill{Value: 5, weight: 1},
+	"Medicine: Immunology":        Skill{Value: 5, weight: 1},
+	"Medicine: Internal Medicine": Skill{Value: 5, weight: 1},
+	"Medicine: Neurology":         Skill{Value: 5, weight: 1},
+	"Medicine: Nuclear Medicine":  Skill{Value: 5, weight: 1},
+	"Medicine: Oncology":          Skill{Value: 5, weight: 1},
+	"Medicine: Other":             Skill{Value: 5, weight: 1},
+	"Medicine: Pathology":         Skill{Value: 5, weight: 1},
+	"Medicine: Pediatrics":        Skill{Value: 5, weight: 1},
+	"Medicine: Radiology":         Skill{Value: 5, weight: 1},
+	"Medicine: Surgery":           Skill{Value: 5, weight: 1},
+}
+
+// PerformSkills is a map of skills.
+var PerformSkills = map[string]Skill{
+	"Perform: Act":             Skill{Value: 5, weight: 1},
+	"Perform: Dance":           Skill{Value: 5, weight: 1},
+	"Perform: Juggle":          Skill{Value: 5, weight: 1},
+	"Perform: Other":           Skill{Value: 5, weight: 1},
+	"Perform: Play Instrument": Skill{Value: 5, weight: 1},
+	"Perform: Recite":          Skill{Value: 5, weight: 1},
+	"Perform: Sing":            Skill{Value: 5, weight: 1},
+}
+
+// PilotSkills is a map of skills.
+var PilotSkills = map[string]Skill{
+	"Pilot: Battleship":      Skill{Value: 0, weight: 1},
+	"Pilot: Helicopter":      Skill{Value: 0, weight: 1},
+	"Pilot: Hot Air Balloon": Skill{Value: 0, weight: 1},
+	"Pilot: Hovercraft":      Skill{Value: 0, weight: 1},
+	"Pilot: Jet Airliner":    Skill{Value: 0, weight: 1},
+	"Pilot: Jet Boat":        Skill{Value: 0, weight: 1},
+	"Pilot: Jet Fighter":     Skill{Value: 0, weight: 1},
+	"Pilot: Ocean Liner":     Skill{Value: 0, weight: 1},
+	"Pilot: Propeller Plane": Skill{Value: 0, weight: 1},
+}
+
+// LanguageSkills is a map of skills.
+var LanguageSkills = map[string]Skill{
+	"Language: (various non-native)": Skill{Value: 0, weight: 1},
+	"Language: Own":                  Skill{Value: -1, weight: 1},
+}
+
+// ScienceSkills is a map of skills.
+var ScienceSkills = map[string]Skill{
+	"Science: Astronomy":   Skill{Value: 1, weight: 1},
+	"Science: Biology":     Skill{Value: 1, weight: 1},
+	"Science: Botany":      Skill{Value: 1, weight: 1},
+	"Science: Chemistry":   Skill{Value: 1, weight: 1},
+	"Science: Cyptography": Skill{Value: 1, weight: 1},
+	"Science: Forensics":   Skill{Value: 1, weight: 1},
+	"Science: Genetics":    Skill{Value: 1, weight: 1},
+	"Science: Geology":     Skill{Value: 1, weight: 1},
+	"Science: Mathematics": Skill{Value: 10, weight: 1},
+	"Science: Meteorology": Skill{Value: 1, weight: 1},
+	"Science: Pharmacy":    Skill{Value: 1, weight: 1},
+	"Science: Physics":     Skill{Value: 1, weight: 1},
+	"Science: Planetology": Skill{Value: 1, weight: 1},
+	"Science: Psychology":  Skill{Value: 5, weight: 1},
+	"Science: Thaumaturgy": Skill{Value: 0, weight: 1},
+	"Science: Zoology":     Skill{Value: 5, weight: 1},
+}
+
+// TechnologyUseSkills is a map of skills.
+var TechnologyUseSkills = map[string]Skill{
+	"Technology Use: Communications":      Skill{Value: 5, weight: 1},
+	"Technology Use: Electronic Security": Skill{Value: 5, weight: 1},
+	"Technology Use: Electronics":         Skill{Value: 5, weight: 1},
+	"Technology Use: Other":               Skill{Value: 5, weight: 1},
+	"Technology Use: Sensor Systems":      Skill{Value: 5, weight: 1},
+	"Technology Use: Surveillance":        Skill{Value: 5, weight: 1},
+	"Technology Use: Traps":               Skill{Value: 5, weight: 1},
+}
+
+// EsotericSkills is a map of the creepy stuff.
+var EsotericSkills = map[string]Skill{
+	"Cthulhu Mythos": Skill{Value: 0, weight: 1},
+	"Sorcery":        Skill{Value: 0, weight: 1},
+}
+
+// GeneralSkills is a map of everything except Combat skills.
+var GeneralSkills = joinMaps(
+	DefaultSkills,
+	ArtSkills,
+	AthleticsSkills,
+	ComputerUseSkills,
+	CraftSkills,
+	DriveSkills,
+	HeavyMachineSkills,
+	KnowledgeSkills,
+	MedicineSkills,
+	PerformSkills,
+	PilotSkills,
+	LanguageSkills,
+	ScienceSkills,
+	TechnologyUseSkills,
+	EsotericSkills,
+)

@@ -82,18 +82,18 @@ func randomChoice(choices []string) string {
 	return choices[r]
 }
 
-func randomInt(min, max int) int {
-	// Returns an int in [min,max).
-	return rand.Intn(max-min) + min
+func randomInt(max int) int {
+	// Returns an int in [1..max].
+	return rand.Intn(max) + 1
 }
 
-func weightedRandomChoice(choices []string, weights []float64) string {
-	sum := 0.0
+func weightedRandomChoice(choices []string, weights []int) string {
+	sum := 0
 	for _, w := range weights {
 		sum += w
 	}
-	r := rand.Float64()*sum - 1.0
-	total := 0.0
+	r := randomInt(sum)
+	total := 0
 	for i, w := range weights {
 		total += w
 		if r <= total {
@@ -112,7 +112,7 @@ type Die struct {
 func (d Die) roll() (n int) {
 	n = 0
 	for i := 0; i < d.code; i++ {
-		n += randomInt(1, d.sides)
+		n += randomInt(d.sides)
 	}
 	return n
 }
