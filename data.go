@@ -27,9 +27,9 @@ type Assignment struct {
 // Profession is a list of skills and an [offset, num] slice of
 // optional skills from which num should be sampled.
 type Profession struct {
-	skills    []string
-	optOffset int
-	optNum    int
+	skills []string
+	offset int
+	n      int
 }
 
 // Professions is a map of professions.
@@ -44,14 +44,14 @@ var Professions = map[string]Profession{
 			"LANGUAGE",
 			"Language: Own",
 			"Research",
-			"Computer Use: *",
+			"COMPUTER USE",
 			"CRAFT",
 			"Knowledge: Archaeology",
 			"Medicine",
-			"Science: any",
+			"SCIENCE",
 		},
-		optOffset: 8,
-		optNum:    2,
+		offset: 8,
+		n:      2,
 	},
 	"Philosopher": {
 		skills: []string{
@@ -66,8 +66,8 @@ var Professions = map[string]Profession{
 			"KNOWLEDGE",
 			"SCIENCE",
 		},
-		optOffset: 8,
-		optNum:    2,
+		offset: 8,
+		n:      2,
 	},
 }
 
@@ -78,18 +78,18 @@ var PersonalityTypes = map[string]PersonalityType{
 		desc:  "Your character has spent their lifetime dodging responsibility and believes that problems are best avoided altogether.",
 		skills: []string{
 			"Bargain",
-			 "Bureaucracy",
-			 "Disguise",
-			 "Dodge",
-			 "Fast Talk",
-			 "Gaming",
-			 "Hide",
-			 "Insight",
-			 "LANGUAGE",
-			 "Persuade",
-			 "Sense",
-			 "Sleight of Hand",
-			 "Spot",
+			"Bureaucracy",
+			"Disguise",
+			"Dodge",
+			"Fast Talk",
+			"Gaming",
+			"Hide",
+			"Insight",
+			"LANGUAGE",
+			"Persuade",
+			"Sense",
+			"Sleight of Hand",
+			"Spot",
 		},
 		special: "",
 	},
@@ -98,18 +98,18 @@ var PersonalityTypes = map[string]PersonalityType{
 		desc:  "Your character enjoys calling the shots and persuading others to work.",
 		skills: []string{
 			"Appraise",
-			 "Bargain",
-			 "COMBAT",
-			 "Command",
-			 "Etiquette",
-			 "Fast Talk",
-			 "Insight",
-			 "KNOWLEDGE",
-			 "LANGUAGE",
-			 "Language (Own)",
-			 "PERFORM",
-			 "Persuade",
-			 "Sense",
+			"Bargain",
+			"COMBAT",
+			"Command",
+			"Etiquette",
+			"Fast Talk",
+			"Insight",
+			"KNOWLEDGE",
+			"LANGUAGE",
+			"Language: Own",
+			"PERFORM",
+			"Persuade",
+			"Sense",
 		},
 		special: "",
 	},
@@ -118,17 +118,17 @@ var PersonalityTypes = map[string]PersonalityType{
 		desc:  "When confronted with opposition, your character’s first instinct is to outsmart their opponent to gain an advantage.",
 		skills: []string{
 			"Appraise",
-			 "Bargain",
-			 "COMBAT",
-			 "Disguise",
-			 "Insight",
-			 "KNOWLEDGE",
-			 "Listen",
-			 "Research",
-			 "Sense",
-			 "Spot",
-			 "Stealth",
-			 "TECHNICAL",
+			"Bargain",
+			"COMBAT",
+			"Disguise",
+			"Insight",
+			"KNOWLEDGE",
+			"Listen",
+			"Research",
+			"Sense",
+			"Spot",
+			"Stealth",
+			"TECHNICAL",
 		},
 		special: "",
 	},
@@ -137,19 +137,19 @@ var PersonalityTypes = map[string]PersonalityType{
 		desc:  "Your character believes that technique, craft and expertise are the keys to success.",
 		skills: []string{
 			"Appraise",
-			 "COMBAT",
-			 "CRAFT",
-			 "Disguise",
-			 "Dodge",
-			 "Fine Manipulation",
-			 "First Aid",
-			 "KNOWLEDGE",
-			 "Navigate",
-			 "PILOT",
-			 "Ride",
-			 "Sleight of Hand",
-			 "Stealth",
-			 },
+			"COMBAT",
+			"CRAFT",
+			"Disguise",
+			"Dodge",
+			"Fine Manipulation",
+			"First Aid",
+			"KNOWLEDGE",
+			"Navigate",
+			"PILOT",
+			"Ride",
+			"Sleight of Hand",
+			"Stealth",
+		},
 		special: "",
 	},
 	"Bruiser": {
@@ -196,6 +196,177 @@ var PersonalityTypes = map[string]PersonalityType{
 
 // Assignments is a map of assignments.
 var Assignments = map[string]Assignment{
+	"Zombie Wrangler": {
+		bonus: 10,
+		skills: []string{
+			"Command",
+			"Grapple",
+			"Knowledge: Occult",
+			"Sense",
+			"Sorcery",
+		},
+	},
+	"Researcher": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"KNOWLEDGE",
+			"KNOWLEDGE",
+			"Listen",
+			"Research",
+		},
+	},
+	"Tosher": {
+		bonus: 10,
+		skills: []string{
+			"Climb",
+			"FIREARMS",
+			"SCIENCE",
+			"Spot",
+			"Technology Use: Survival gear",
+		},
+	},
+	"Mad Boffin": {
+		bonus: 10,
+		skills: []string{
+			"Computer Use: Magic",
+			"CRAFT",
+			"Firearms: Esoteric",
+			"REPAIR",
+			"SCIENCE",
+		},
+	},
+	"Computational Demonology Researcher": {
+		bonus: 10,
+		skills: []string{
+			"COMPUTER USE",
+			"Computer Use: Magic",
+			"Science: Mathematics",
+			"Science: Thaumaturgy",
+			"Sorcery",
+		},
+	},
+	"Cultural Attache": {
+		bonus: 10,
+		skills: []string{
+			"Etiquette",
+			"Knowledge: History",
+			"Knowledge: Occult",
+			"Knowledge: Politics",
+			"Persuade",
+		},
+	},
+	"Counter-Possession Exorcist": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"Insight",
+			"Knowledge: Occult",
+			"Sorcery",
+			"Stealth",
+		},
+	},
+	"Translator": {
+		bonus: 10,
+		skills: []string{
+			"Appraise",
+			"Fine Manipulation",
+			"Knowledge: History",
+			"Knowledge: Occult",
+			"Language: Any",
+			"Sorcery",
+		},
+	},
+	"Apprentice Demonologist": {
+		bonus: 10,
+		skills: []string{
+			"Knowledge: Law",
+			"Knowledge: Occult",
+			"Persuade",
+			"Research",
+			"Sorcery",
+		},
+	},
+	"Plumber": {
+		bonus: 10,
+		skills: []string{
+			"FIREARMS",
+			"Knowledge: Occult",
+			"Science: Thaumaturgy",
+			"Sorcery",
+			"Stealth",
+		},
+	},
+	"Occult Forensics": {
+		bonus: 10,
+		skills: []string{
+			"SCIENCE",
+			"SCIENCE",
+			"SCIENCE",
+			"Sense",
+			"Spot",
+		},
+	},
+	"Medical and Psychological": {
+		bonus: 10,
+		skills: []string{
+			"First Aid",
+			"MEDICINE",
+			"MEDICINE",
+			"Research",
+			"Science: Biology",
+		},
+	},
+	"Media Relations": {
+		bonus: 10,
+		skills: []string{
+			"Computer Use: Hacking",
+			"Fast Talk",
+			"Knowledge: Occult",
+			"Knowledge: Politics",
+			"Research",
+		},
+	},
+	"Counter-Subversion": {
+		bonus: 10,
+		skills: []string{
+			"Insight",
+			"Knowledge: Espionage",
+			"Knowledge: Politics",
+			"Research",
+			"Technology Use: Surveillance",
+		},
+	},
+	"Information Technology": {
+		bonus: 10,
+		skills: []string{
+			"COMPUTER USE",
+			"COMPUTER USE",
+			"COMPUTER USE",
+			"Knowledge: Occult",
+			"TECHNOLOGY USE",
+		},
+	},
+	"Counter-Possession": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"Insight",
+			"Knowledge: Occult",
+			"Stealth",
+			"Sorcery",
+		},
+	},
+	"Contracts and Bindings": {
+		bonus: 10,
+		skills: []string{
+			"Knowledge: Law",
+			"Knowledge: Occult",
+			"Persuade",
+			"Research",
+			"Sorcery",
+		},
+	},
 	"Archives": {
 		bonus: 10,
 		skills: []string{
@@ -234,6 +405,14 @@ var Assignments = map[string]Assignment{
 	},
 }
 
+func ListAssignmentKeys() []string {
+	names := make([]string, len(Assignments))
+	for k, _ := range Assignments {
+		names = append(names, k)
+	}
+	return names
+}
+
 func randomSkillChoice(skills map[string]Skill) (string, Skill) {
 	names := make([]string, len(skills))
 	for k := range skills {
@@ -265,17 +444,21 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(KnowledgeSkills)
 	case "CRAFT":
 		name, newSkill = randomWeightedSkillChoice(CraftSkills)
+	case "MEDICAL":
+		name, newSkill = randomWeightedSkillChoice(MedicineSkills)
 	case "LANGUAGE":
 		name, newSkill = randomWeightedSkillChoice(LanguageSkills)
 	case "SCIENCE":
 		name, newSkill = randomWeightedSkillChoice(ScienceSkills)
 	case "PERFORM":
 		name, newSkill = randomWeightedSkillChoice(PerformSkills)
+	case "PILOT":
+		name, newSkill = randomWeightedSkillChoice(PilotSkills)
 	case "ART":
 		name, newSkill = randomWeightedSkillChoice(ArtSkills)
 	case "TECHNICAL":
 		name, newSkill = randomWeightedSkillChoice(TechnicalSkills)
-	case "COMPUTER":
+	case "COMPUTER USE":
 		name, newSkill = randomWeightedSkillChoice(ComputerUseSkills)
 	case "DRIVE":
 		name, newSkill = randomWeightedSkillChoice(DriveSkills)
@@ -558,8 +741,8 @@ var PilotSkills = map[string]Skill{
 
 // LanguageSkills is a map of skills.
 var LanguageSkills = map[string]Skill{
-	"Language: (various non-native)": {Value: 0, weight: 1},
-	"Language: Own":                  {Value: -1, weight: 1},
+	"Language: non-native": {Value: 0, weight: 1},
+	"Language: Own":        {Value: -1, weight: 1},
 }
 
 // ScienceSkills is a map of skills.
@@ -616,4 +799,10 @@ var GeneralSkills = joinMaps(
 	ScienceSkills,
 	TechnologyUseSkills,
 	EsotericSkills,
+)
+
+// AlllSkills is a map of everything.
+var AllSkills = joinMaps(
+	CombatSkills,
+	GeneralSkills,
 )

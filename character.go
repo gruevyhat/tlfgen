@@ -16,6 +16,8 @@ var (
 		"ERROR":   logging.ERROR,
 		"WARNING": logging.WARNING,
 	}
+	threeD6 = Die{code: 3, sides: 6}
+	twoD6   = Die{code: 2, sides: 6}
 )
 
 // Sets the random seed from a hex hash string.
@@ -29,8 +31,28 @@ func (c *Character) setCharSeed(charSeed string) {
 
 // Declare various character data lists.
 var (
-	genders          = []string{"Male", "Female"}
-	assignments      = []string{"Archives", "Computational Demonology"}
+	genders     = []string{"Male", "Female"}
+	assignments = []string{
+		"Archives",
+		"Computational Demonology",
+		"Zombie Wrangler",
+		"Researcher",
+		"Tosher",
+		"Mad Boffin",
+		"Computational Demonology Researcher",
+		"Cultural Attache",
+		"Counter-Possession Exorcist",
+		"Translator",
+		"Apprentice Demonologist",
+		"Plumber",
+		"Occult Forensics",
+		"Medical and Psychological",
+		"Media Relations",
+		"Counter-Subversion",
+		"Information Technology",
+		"Counter-Possession",
+		"Contracts and Bindings",
+	}
 	personalityTypes = []string{"Bruiser", "Nutter", "Master", "Leader", "Slacker", "Thinker"}
 	professions      = []string{"Occultist", "Philosopher"}
 	languages        = []string{"English", "French", "Spanish", "German", "Latin", "Ancient Greek", "Arabic", "Enochian"}
@@ -91,9 +113,6 @@ type Weapon struct {
 }
 
 func (c *Character) rollBaseCharacteristics() {
-	threeD6 := Die{code: 3, sides: 6}
-	twoD6 := Die{code: 2, sides: 6}
-
 	c.Base.Strength = threeD6.roll()
 	c.Base.Constitution = threeD6.roll()
 	c.Base.Power = threeD6.roll()
@@ -198,7 +217,27 @@ func (c *Character) calcAssignmentSkills() {
 	}
 }
 
-func (c *Character) rollSkills() {}
+func (c *Character) rollProfessionSkills() {
+	prof := Professions[c.Profession]
+	skills := prof.skills[0:prof.offset]
+	randSkills := prof.skills[prof.offset:]
+	for i := 0; i < prof.n; i++ {
+		skills = append(skills, randomChoice(randSkills))
+	}
+	points := c.Base.Education * 20
+	m := make(map[string]Skill)
+	for _, skill := range skills {
+		m[skill] = AllSkills[skill]
+	}
+	for i := 0; i < points; i++ {
+		skill, _ := getSkill(randomChoice(skills))
+		if _, ok := c.Skills[skill]; !ok {
+			c.Skills[skill] = 1
+		} else {
+			c.Skills[skill] += 1
+		}
+	}
+}
 
 // Randomly sample from gender list.
 func (c *Character) setGender(gender string) {
@@ -206,6 +245,14 @@ func (c *Character) setGender(gender string) {
 		c.Gender = gender
 	} else {
 		c.Gender = randomChoice(genders)
+	}
+}
+
+func (c *Character) setAge(age int) {
+	if age != 0 {
+		c.Age = age
+	} else {
+		c.Age = twoD6.roll() + 17
 	}
 }
 
@@ -250,7 +297,7 @@ func (c Character) ToJSON(pretty bool) string {
 // Opts contains user input optionsr; used in CLI implementations.
 type Opts struct {
 	Name            string `docopt:"--name"`
-	Age             string `docopt:"--age"`
+	Age             int    `docopt:"--age"`
 	Gender          string `docopt:"--gender"`
 	PersonalityType string `docopt:"--personality_type"`
 	Assignment      string `docopt:"--assignment"`
@@ -271,6 +318,7 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	log.Info("Generating characteristics.")
 	c.setGender(opts.Gender)
 	c.setName(opts.Name)
+	c.setAge(opts.Age)
 	c.rollBaseCharacteristics()
 	c.calcDerivedCharacteristics()
 	c.getPersonalityType(opts.PersonalityType)
@@ -279,10 +327,11 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	c.calcBaseSkills()
 	c.calcPersonalitySkills()
 	c.calcAssignmentSkills()
+	c.rollProfessionSkills()
 
 	// Generate stuff
 	//c.setWeapons()
-	//c.setEquipment()
+	//c.setEqugipment()
 
 	// Generate fluff
 	//c.setDescription(opts.Description)
