@@ -34,6 +34,101 @@ type Profession struct {
 
 // Professions is a map of professions.
 var Professions = map[string]Profession{
+	"": {
+		skills: []string{
+		},
+		offset: 8,
+		n:      2,
+	},
+	"Consultant": {
+		skills: []string{
+			"Bureaucracy",
+			 "COMPUTER USE",
+			 "Fast Talk",
+			 "Insight",
+			 "Listen",
+			 "Language: Own",
+			 "Persuade",
+			 "Research",
+			 "Appraise",
+			 "Bargain",
+			 "Etiquette",
+			 "KNOWLEDGE",
+			 "SCIENCE",
+			 "TECHNICAL SKILL",
+		},
+		offset: 9,
+		n:      2,
+	},
+	"Computer Hacker or Technician": {
+		skills: []string{
+			"COMPUTER USE",
+			"COMPUTER USE",
+			 "KNOWLEDGE",
+			 "KNOWLEDGE",
+			 "Language: a programming language",
+			 "Repair: Electrical",
+			 "Repair: Electronics",
+			 "Research",
+			 "Science: Mathematics",
+			 "TECHNOLOGY USE",
+			 "Bureaucracy",
+			 "Hide",
+			 "Knowledge: Law",
+		},
+		offset: 11,
+		n:      1,
+	},
+	"Clerical Worker": {
+		skills: []string{
+			"Bargain",
+			 "Bureaucracy",
+			 "COMPUTER USE",
+			 "Etiquette",
+			 "Knowledge: Accounting",
+			 "KNOWLEDGE",
+			 "Knowledge: Law",
+			 "Language: Own",
+			 "Persuade",
+			 "Research",
+
+		},
+		offset: 8,
+		n:      0,
+	},
+	"Artist or Designer": {
+		skills: []string{
+			"CRAFT",
+			 "Insight",
+			 "KNOWLEDGE",
+			 "LANGUAGE",
+			 "Language: Own",
+			 "Listen",
+			 "Research",
+			 "Spot",
+			 "ART",
+
+		},
+		offset: 9,
+		n:      2,
+	},
+	"Antiquarian": {
+		skills: []string{
+			"Appraise",
+			 "ART",
+			 "Bargain",
+			 "CRAFT",
+			 "Fine Manipulation",
+			 "KNOWLEDGE",
+			 "Knowledge: History",
+			 "Research",
+			 "ART",
+			 "KNOWLEDGE",
+			 "SCIENCE",
+		},
+		offset: 8,
+		n:      2,
+	},
 	"Occultist": {
 		skills: []string{
 			"Fast Talk",
@@ -444,7 +539,7 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(KnowledgeSkills)
 	case "CRAFT":
 		name, newSkill = randomWeightedSkillChoice(CraftSkills)
-	case "MEDICAL":
+	case "MEDICINE":
 		name, newSkill = randomWeightedSkillChoice(MedicineSkills)
 	case "LANGUAGE":
 		name, newSkill = randomWeightedSkillChoice(LanguageSkills)

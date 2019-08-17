@@ -54,7 +54,15 @@ var (
 		"Contracts and Bindings",
 	}
 	personalityTypes = []string{"Bruiser", "Nutter", "Master", "Leader", "Slacker", "Thinker"}
-	professions      = []string{"Occultist", "Philosopher"}
+	professions      = []string{
+		"Occultist",
+		"Philosopher",
+		"Consultant",
+		"Computer Hacker or Technician",
+		"Clerical Worker",
+		"Artist or Designer",
+		"Antiquarian",
+	}
 	languages        = []string{"English", "French", "Spanish", "German", "Latin", "Ancient Greek", "Arabic", "Enochian"}
 )
 
@@ -253,6 +261,16 @@ func (c *Character) setAge(age int) {
 		c.Age = age
 	} else {
 		c.Age = twoD6.roll() + 17
+	}
+	c.Base.Education += c.Age / 10
+	for a := c.Age - 40; a > 40; a += 10 {
+		r := randomInt(3)
+		switch r {
+		case 0: c.Base.Strength -= 1
+		case 1: c.Base.Constitution -= 1
+		case 2: c.Base.Dexterity -= 1
+		case 3: c.Base.Charisma -= 1
+		}
 	}
 }
 
