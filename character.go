@@ -289,7 +289,7 @@ func (c *Character) setName(name string) {
 	if name != "" {
 		c.Name = name
 	} else {
-		c.Name = "Anonymous"
+		c.Name = randomName(c.Gender)
 	}
 }
 

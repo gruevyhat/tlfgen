@@ -14,7 +14,7 @@ var usage = `The Laundry Files Character Generator
 Usage: tlf [options]
 
 Options:
-  -n, --name=<str>          The character's full name. [default: Anonymous]
+  -n, --name=<str>          The character's full name.
   -g, --gender=<str>        The character's gender.
   -a, --age=<int>           The character's age.
   -p, --personality=<str>   The character's personality type.

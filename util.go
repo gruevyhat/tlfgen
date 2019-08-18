@@ -12,8 +12,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	randomdata "github.com/Pallinder/go-randomdata"
 )
 
+var r = rand.New(rand.NewSource(42))
 var dataDir = setDataDir()
 
 func setDataDir() string {
@@ -73,6 +76,18 @@ func setSeed(charHash string) (string, error) {
 	rand.Seed(int64(seed))
 	log.Info("Set new seed:", seed)
 	return charHash, nil
+}
+
+func randomName(gender string) string {
+	randomdata.CustomRand(r)
+	var name string
+	switch gender {
+	case "Male":
+		name = randomdata.FullName(randomdata.Male)
+	case "Female":
+		name = randomdata.FullName(randomdata.Female)
+	}
+	return name
 }
 
 func sampleWithoutReplacement(choices []string, n int) []string {
