@@ -855,7 +855,6 @@ var DefaultSkills = map[string]Skill{
 	"Fine Manipulation": {Value: 5, weight: 1},
 	"First Aid":         {Value: 30, weight: 1},
 	"Gaming":            {Value: 10, weight: 1},
-	"Geology":           {Value: 0, weight: 1},
 	"Grapple":           {Value: 25, weight: 1},
 	"Heavy Machine":     {Value: 5, weight: 1},
 	"Hide":              {Value: 10, weight: 1},
