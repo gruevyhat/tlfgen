@@ -52,6 +52,7 @@ type Character struct {
 	Seed            string                 `json:"seed"`
 	Base            BaseCharacteristics    `json:"base"`
 	Derived         DerivedCharacteristics `json:"derived"`
+	Wealth          string                 `json:"wealth"`
 	//Description string     `json:"description"`
 	//Weapons     []Weapon   `json:"weapons"`
 	//Equipment   []string   `json:"equipment"`
@@ -154,6 +155,7 @@ func (c *Character) getProfession(opt string) *Character {
 	} else {
 		c.Profession = randomChoice(professions)
 	}
+	c.Wealth = Professions[c.Profession].wealth
 	return c
 }
 

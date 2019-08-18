@@ -32,15 +32,136 @@ type Profession struct {
 	skills []string
 	offset int
 	n      int
+	wealth string
 }
 
 // Professions is a map of professions.
 var Professions = map[string]Profession{
-	//"": {
-	//	skills: []string{},
-	//	offset: 8,
-	//	n:      2,
-	//},
+	"Student": {
+		skills: []string{
+			"Language: Own",
+			"Research",
+			"ART",
+			"Athletics",
+			"COMPUTER USE",
+			"CRAFT",
+			"First Aid",
+			"Insight",
+			"KNOWLEDGE",
+			"LANGUAGE",
+			"Listen",
+			"Medicine",
+			"Perform",
+			"Persuade",
+			"Psychotherapy",
+			"REPAIR",
+			"SCIENCE",
+			"TECHNOLOGY USE",
+		},
+		offset: 2,
+		n:      8,
+		wealth: "Poor or Average",
+	},
+	"Spy": {
+		skills: []string{
+			"Dodge",
+			"Fast Talk",
+			"Hide",
+			"Listen",
+			"Research",
+			"Spot",
+			"Stealth",
+			"Art: Photography",
+			"Brawl",
+			"Bureaucracy",
+			"COMPUTER USE",
+			"Disguise",
+			"Etiquette",
+			"FIREARM",
+			"Grapple",
+			"KNOWLEDGE",
+			"LANGUAGE",
+			"Language: Own",
+			"Navigate",
+			"PILOT",
+			"Psychology",
+			"Repair: Electronics",
+			"Repair: Mechanical",
+			"Ride",
+			"Swim",
+			"TECHNOLOGY USE",
+			"Throw",
+			"Track",
+		},
+		offset: 7,
+		n:      3,
+		wealth: "Average",
+	},
+	"Scientist": {
+		skills: []string{
+			"COMPUTER USE",
+			"CRAFT",
+			"Persuade",
+			"Research",
+			"TECHNOLOGY USE",
+			"KNOWLEDGE",
+			"SCIENCE",
+		},
+		offset: 5,
+		n:      5,
+		wealth: "Average",
+	},
+	"Professor, Scholar or Teacher": {
+		skills: []string{
+			"Insight",
+			"Persuade",
+			"Research",
+			"Teach",
+			"Appraise",
+			"ART",
+			"COMPUTER USE",
+			"CRAFT",
+			"First Aid",
+			"Insight",
+			"KNOWLEDGE",
+			"LANGUAGE",
+			"Language: Own",
+			"Listen",
+			"Medicine",
+			"Psychotherapy",
+			"REPAIR",
+			"SCIENCE",
+			"TECHNOLOGY USE",
+		},
+		offset: 4,
+		n:      6,
+		wealth: "Average",
+	},
+	"Police Officer": {
+		skills: []string{
+			"Brawl",
+			"Knowledge: Law",
+			"Listen",
+			"Persuade",
+			"Spot",
+			"Brawl",
+			"COMPUTER USE",
+			"Disguise",
+			"Dodge",
+			"DRIVE",
+			"Fast Talk",
+			"FIREARM",
+			"Grapple",
+			"Hide",
+			"Insight",
+			"Knowledge: Streetwise",
+			"LANGUAGE",
+			"Stealth",
+		},
+		offset: 5,
+		n:      5,
+		wealth: "Average",
+	},
 	"Parapsychologist": {
 		skills: []string{
 			"Fast Talk",
@@ -56,6 +177,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 0,
 		n:      0,
+		wealth: "Average",
 	},
 	"Military Officer": {
 		skills: []string{
@@ -71,6 +193,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 8,
 		n:      2,
+		wealth: "Average",
 	},
 	"Linguist": {
 		skills: []string{
@@ -86,6 +209,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 7,
 		n:      3,
+		wealth: "Average",
 	},
 	"Lawyer": {
 		skills: []string{
@@ -100,8 +224,9 @@ var Professions = map[string]Profession{
 			"Persuade",
 			"Research",
 		},
-		offset: 0,
+		offset: 10,
 		n:      0,
+		wealth: "Affluent",
 	},
 	"Labourer": {
 		skills: []string{
@@ -121,6 +246,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 6,
 		n:      4,
+		wealth: "Average",
 	},
 	"Journalist": {
 		skills: []string{
@@ -142,6 +268,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 7,
 		n:      3,
+		wealth: "Average",
 	},
 	"Engineer or Technician": {
 		skills: []string{
@@ -164,12 +291,13 @@ var Professions = map[string]Profession{
 
 		offset: 5,
 		n:      5,
+		wealth: "Average",
 	},
 	"Doctor": {
 		skills: []string{
 			"First Aid",
 			"Language: Own",
-			"Medicine",
+			"MEDICINE",
 			"Persuade",
 			"Research",
 			"Spot",
@@ -181,6 +309,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 6,
 		n:      4,
+		wealth: "Affluent",
 	},
 	"Dilettante": {
 		skills: []string{
@@ -200,6 +329,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 2,
 		n:      6,
+		wealth: "Affluent",
 	},
 	"Consultant": {
 		skills: []string{
@@ -220,6 +350,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 10,
 		n:      2,
+		wealth: "Affluent",
 	},
 	"Computer Hacker or Technician": {
 		skills: []string{
@@ -238,6 +369,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 9,
 		n:      1,
+		wealth: "Average",
 	},
 	"Clerical Worker": {
 		skills: []string{
@@ -254,6 +386,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 0,
 		n:      0,
+		wealth: "Average",
 	},
 	"Artist or Designer": {
 		skills: []string{
@@ -269,6 +402,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 8,
 		n:      2,
+		wealth: "Average",
 	},
 	"Antiquarian": {
 		skills: []string{
@@ -286,6 +420,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 8,
 		n:      2,
+		wealth: "Average",
 	},
 	"Occultist": {
 		skills: []string{
@@ -305,6 +440,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 8,
 		n:      2,
+		wealth: "Average",
 	},
 	"Philosopher": {
 		skills: []string{
@@ -321,6 +457,7 @@ var Professions = map[string]Profession{
 		},
 		offset: 8,
 		n:      2,
+		wealth: "Average",
 	},
 }
 
@@ -767,61 +904,61 @@ func joinMaps(maps ...map[string]Skill) map[string]Skill {
 
 // ArtillerySkills is a map of skills.
 var ArtillerySkills = map[string]Skill{
-	"Artillery: Cannon":           {Value: 0, weight: 1},
-	"Artillery: Other":            {Value: 0, weight: 1},
-	"Artillery: Rocket Launcher":  {Value: 0, weight: 1},
-	"Artillery: Turret":           {Value: 0, weight: 1},
-	"Artillery: Vehicular Weapon": {Value: 0, weight: 1},
+	"Artillery: Cannon":           {Value: 0, weight: 10},
+	"Artillery: Other":            {Value: 0, weight: 10},
+	"Artillery: Rocket Launcher":  {Value: 0, weight: 10},
+	"Artillery: Turret":           {Value: 0, weight: 10},
+	"Artillery: Vehicular Weapon": {Value: 0, weight: 10},
 }
 
 // FirearmSkills is a map of skills.
 var FirearmSkills = map[string]Skill{
 	"Firearm: Assault Rifle":  {Value: 15, weight: 5},
-	"Firearm: Esoteric":       {Value: 0, weight: 5},
-	"Firearm: Exotic":         {Value: 5, weight: 1},
+	"Firearm: Esoteric":       {Value: 0, weight: 20},
+	"Firearm: Exotic":         {Value: 5, weight: 10},
 	"Firearm: Pistol":         {Value: 20, weight: 20},
 	"Firearm: Rifle":          {Value: 25, weight: 10},
-	"Firearm: Shotgun":        {Value: 30, weight: 10},
-	"Firearm: Submachine Gun": {Value: 15, weight: 1},
+	"Firearm: Shotgun":        {Value: 30, weight: 5},
+	"Firearm: Submachine Gun": {Value: 15, weight: 5},
 }
 
 // HeavyWeaponSkills is a map of skills.
 var HeavyWeaponSkills = map[string]Skill{
-	"Heavy Weapon: Bazooka":           {Value: 0, weight: 1},
-	"Heavy Weapon: Grenade Launcher":  {Value: 0, weight: 1},
-	"Heavy Weapon: Heavy Machine Gun": {Value: 0, weight: 1},
-	"Heavy Weapon: Minigun":           {Value: 0, weight: 1},
-	"Heavy Weapon: Other":             {Value: 0, weight: 1},
-	"Heavy Weapon: Rocket Launcher":   {Value: 0, weight: 1},
+	"Heavy Weapon: Bazooka":           {Value: 0, weight: 10},
+	"Heavy Weapon: Grenade Launcher":  {Value: 0, weight: 10},
+	"Heavy Weapon: Heavy Machine Gun": {Value: 0, weight: 10},
+	"Heavy Weapon: Minigun":           {Value: 0, weight: 10},
+	"Heavy Weapon: Other":             {Value: 0, weight: 10},
+	"Heavy Weapon: Rocket Launcher":   {Value: 0, weight: 10},
 }
 
 // MeleeWeaponSkills is a map of skills.
 var MeleeWeaponSkills = map[string]Skill{
-	"Melee Weapon: Axe":     {Value: 5, weight: 5},
+	"Melee Weapon: Axe":     {Value: 5, weight: 15},
 	"Melee Weapon: Club":    {Value: 5, weight: 10},
-	"Melee Weapon: Garrote": {Value: 5, weight: 1},
+	"Melee Weapon: Garrote": {Value: 5, weight: 10},
 	"Melee Weapon: Knife":   {Value: 5, weight: 20},
-	"Melee Weapon: Other":   {Value: 5, weight: 1},
-	"Melee Weapon: Spear":   {Value: 5, weight: 1},
-	"Melee Weapon: Staff":   {Value: 5, weight: 5},
-	"Melee Weapon: Sword":   {Value: 5, weight: 5},
-	"Melee Weapon: Whip":    {Value: 5, weight: 1},
+	"Melee Weapon: Other":   {Value: 5, weight: 10},
+	"Melee Weapon: Spear":   {Value: 5, weight: 10},
+	"Melee Weapon: Staff":   {Value: 5, weight: 15},
+	"Melee Weapon: Sword":   {Value: 5, weight: 15},
+	"Melee Weapon: Whip":    {Value: 5, weight: 10},
 }
 
 // MissileWeaponSkills is a map of skills.
 var MissileWeaponSkills = map[string]Skill{
-	"Missile Weapon: Blowgun":        {Value: 5, weight: 1},
-	"Missile Weapon: Boomerang":      {Value: 5, weight: 1},
-	"Missile Weapon: Bow":            {Value: 5, weight: 10},
-	"Missile Weapon: Crossbow":       {Value: 5, weight: 1},
-	"Missile Weapon: Dart":           {Value: 5, weight: 1},
-	"Missile Weapon: Javelin":        {Value: 5, weight: 1},
-	"Missile Weapon: Other":          {Value: 5, weight: 1},
-	"Missile Weapon: Shuriken":       {Value: 5, weight: 1},
-	"Missile Weapon: Sling":          {Value: 5, weight: 1},
-	"Missile Weapon: Spear":          {Value: 5, weight: 1},
-	"Missile Weapon: Throwing Axe":   {Value: 5, weight: 1},
-	"Missile Weapon: Throwing Knife": {Value: 5, weight: 5},
+	"Missile Weapon: Blowgun":        {Value: 5, weight: 10},
+	"Missile Weapon: Boomerang":      {Value: 5, weight: 10},
+	"Missile Weapon: Bow":            {Value: 5, weight: 20},
+	"Missile Weapon: Crossbow":       {Value: 5, weight: 10},
+	"Missile Weapon: Dart":           {Value: 5, weight: 10},
+	"Missile Weapon: Javelin":        {Value: 5, weight: 10},
+	"Missile Weapon: Other":          {Value: 5, weight: 10},
+	"Missile Weapon: Shuriken":       {Value: 5, weight: 10},
+	"Missile Weapon: Sling":          {Value: 5, weight: 10},
+	"Missile Weapon: Spear":          {Value: 5, weight: 10},
+	"Missile Weapon: Throwing Axe":   {Value: 5, weight: 10},
+	"Missile Weapon: Throwing Knife": {Value: 5, weight: 15},
 }
 
 // DefaultSkills is a map of default skills.
@@ -835,23 +972,22 @@ var DefaultSkills = map[string]Skill{
 	"Command":           {Value: 5, weight: 1},
 	"Demolition":        {Value: 1, weight: 1},
 	"Disguise":          {Value: 5, weight: 1},
-	"Dodge":             {Value: -1, weight: 20},
-	"Drive: Automobile": {Value: 20, weight: 1},
+	"Dodge":             {Value: -1, weight: 30},
+	"Drive: Automobile": {Value: 20, weight: -10},
 	"Etiquette":         {Value: 5, weight: 1},
 	"Fast Talk":         {Value: 5, weight: 1},
 	"Fine Manipulation": {Value: 5, weight: 1},
-	"First Aid":         {Value: 30, weight: 5},
+	"First Aid":         {Value: 30, weight: 10},
 	"Gaming":            {Value: 10, weight: 1},
 	"Grapple":           {Value: 25, weight: 1},
-	"Heavy Machine":     {Value: 5, weight: 1},
 	"Hide":              {Value: 10, weight: 1},
 	"Insight":           {Value: 5, weight: 1},
 	"Jump":              {Value: 25, weight: 1},
-	"Listen":            {Value: 25, weight: 1},
+	"Listen":            {Value: 25, weight: 10},
 	"Navigate":          {Value: 10, weight: 1},
 	"Perform":           {Value: 5, weight: 1},
 	"Persuade":          {Value: 15, weight: 1},
-	"Research":          {Value: 25, weight: 10},
+	"Research":          {Value: 25, weight: 20},
 	"Ride":              {Value: 5, weight: 1},
 	"Sense":             {Value: 10, weight: 1},
 	"Sleight of Hand":   {Value: 5, weight: 1},
@@ -867,148 +1003,148 @@ var DefaultSkills = map[string]Skill{
 
 // ArtSkills is a map of skills.
 var ArtSkills = map[string]Skill{
-	"Art: Calligraphy": {Value: 5, weight: 1},
-	"Art: Drawing":     {Value: 5, weight: 1},
-	"Art: Other":       {Value: 5, weight: 1},
-	"Art: Painting":    {Value: 5, weight: 1},
-	"Art: Photography": {Value: 5, weight: 1},
-	"Art: Sculpture":   {Value: 5, weight: 1},
-	"Art: Writing":     {Value: 5, weight: 1},
+	"Art: Calligraphy": {Value: 5, weight: 10},
+	"Art: Drawing":     {Value: 5, weight: 10},
+	"Art: Other":       {Value: 5, weight: 10},
+	"Art: Painting":    {Value: 5, weight: 10},
+	"Art: Photography": {Value: 5, weight: 10},
+	"Art: Sculpture":   {Value: 5, weight: 10},
+	"Art: Writing":     {Value: 5, weight: 10},
 }
 
 // AthleticsSkills is a map of skills.
 var AthleticsSkills = map[string]Skill{
-	"Athletics: Acrobatics":    {Value: 10, weight: 1},
-	"Athletics: Football":      {Value: 10, weight: 1},
-	"Athletics: Baseball":      {Value: 10, weight: 1},
-	"Athletics: Basketball":    {Value: 10, weight: 1},
-	"Athletics: Bowling":       {Value: 10, weight: 1},
-	"Athletics: Cricket":       {Value: 10, weight: 1},
-	"Athletics: Cycling":       {Value: 10, weight: 1},
-	"Athletics: Golf":          {Value: 10, weight: 1},
-	"Athletics: Hockey":        {Value: 10, weight: 1},
-	"Athletics: Rugby":         {Value: 10, weight: 1},
-	"Athletics: Skating":       {Value: 10, weight: 1},
-	"Athletics: Skiing":        {Value: 10, weight: 1},
-	"Athletics: Soccer":        {Value: 10, weight: 1},
-	"Athletics: Tennis":        {Value: 10, weight: 1},
-	"Athletics: Track & Field": {Value: 10, weight: 1},
+	"Athletics: Acrobatics":    {Value: 10, weight: 10},
+	"Athletics: Football":      {Value: 10, weight: 10},
+	"Athletics: Baseball":      {Value: 10, weight: 10},
+	"Athletics: Basketball":    {Value: 10, weight: 10},
+	"Athletics: Bowling":       {Value: 10, weight: 10},
+	"Athletics: Cricket":       {Value: 10, weight: 10},
+	"Athletics: Cycling":       {Value: 10, weight: 10},
+	"Athletics: Golf":          {Value: 10, weight: 10},
+	"Athletics: Hockey":        {Value: 10, weight: 10},
+	"Athletics: Rugby":         {Value: 10, weight: 10},
+	"Athletics: Skating":       {Value: 10, weight: 10},
+	"Athletics: Skiing":        {Value: 10, weight: 10},
+	"Athletics: Soccer":        {Value: 10, weight: 10},
+	"Athletics: Tennis":        {Value: 10, weight: 10},
+	"Athletics: Track & Field": {Value: 10, weight: 10},
 }
 
 // ComputerUseSkills is a map of skills.
 var ComputerUseSkills = map[string]Skill{
-	"Computer Use: Art":         {Value: 5, weight: 1},
-	"Computer Use: Design":      {Value: 5, weight: 1},
-	"Computer Use: Gaming":      {Value: 5, weight: 1},
-	"Computer Use: Hacking":     {Value: 5, weight: 1},
-	"Computer Use: Magic":       {Value: 5, weight: 1},
-	"Computer Use: Maintenance": {Value: 5, weight: 10},
-	"Computer Use: Other":       {Value: 5, weight: 1},
-	"Computer Use: Programming": {Value: 5, weight: 10},
-	"Computer Use: Repair":      {Value: 5, weight: 10},
+	"Computer Use: Art":         {Value: 5, weight: 10},
+	"Computer Use: Design":      {Value: 5, weight: 10},
+	"Computer Use: Gaming":      {Value: 5, weight: 10},
+	"Computer Use: Hacking":     {Value: 5, weight: 10},
+	"Computer Use: Magic":       {Value: 5, weight: 10},
+	"Computer Use: Maintenance": {Value: 5, weight: 20},
+	"Computer Use: Other":       {Value: 5, weight: 10},
+	"Computer Use: Programming": {Value: 5, weight: 20},
+	"Computer Use: Repair":      {Value: 5, weight: 20},
 }
 
 // RepairSkills is a map of skills.
 var RepairSkills = map[string]Skill{
-	"Repair: Electrical": {Value: 5, weight: 1},
-	"Repair: Electronic": {Value: 5, weight: 1},
-	"Repair: Hydraulic":  {Value: 5, weight: 1},
-	"Repair: Mechanical": {Value: 5, weight: 1},
-	"Repair: Plumbing":   {Value: 5, weight: 1},
-	"Repair: Structural": {Value: 5, weight: 1},
+	"Repair: Electrical": {Value: 5, weight: 10},
+	"Repair: Electronic": {Value: 5, weight: 10},
+	"Repair: Hydraulic":  {Value: 5, weight: 10},
+	"Repair: Mechanical": {Value: 5, weight: 10},
+	"Repair: Plumbing":   {Value: 5, weight: 10},
+	"Repair: Structural": {Value: 5, weight: 10},
 }
 
 // CraftSkills is a map of skills.
 var CraftSkills = map[string]Skill{
-	"Craft: Carpentry":      {Value: 5, weight: 1},
-	"Craft: Cooking":        {Value: 5, weight: 1},
-	"Craft: Leatherworking": {Value: 5, weight: 1},
-	"Craft: Pottery":        {Value: 5, weight: 1},
-	"Craft: Sewing":         {Value: 5, weight: 1},
-	"Craft: Woodworking":    {Value: 5, weight: 1},
+	"Craft: Carpentry":      {Value: 5, weight: 10},
+	"Craft: Cooking":        {Value: 5, weight: 10},
+	"Craft: Leatherworking": {Value: 5, weight: 10},
+	"Craft: Pottery":        {Value: 5, weight: 10},
+	"Craft: Sewing":         {Value: 5, weight: 10},
+	"Craft: Woodworking":    {Value: 5, weight: 10},
 }
 
 // DriveSkills is a map of skills.
 var DriveSkills = map[string]Skill{
 	"Drive: Automobile":       {Value: 20, weight: 50},
-	"Drive: Industrial Mover": {Value: 20, weight: 1},
-	"Drive: Motorcycle":       {Value: 20, weight: 1},
-	"Drive: Other":            {Value: 20, weight: 1},
-	"Drive: Tank":             {Value: 20, weight: 1},
+	"Drive: Industrial Mover": {Value: 20, weight: 10},
+	"Drive: Motorcycle":       {Value: 20, weight: 10},
+	"Drive: Other":            {Value: 20, weight: 10},
+	"Drive: Tank":             {Value: 20, weight: 10},
 }
 
 // HeavyMachineSkills is a map of skills.
 var HeavyMachineSkills = map[string]Skill{
-	"Heavy Machine: Boiler":    {Value: 5, weight: 1},
-	"Heavy Machine: Bulldozer": {Value: 5, weight: 1},
-	"Heavy Machine: Crane":     {Value: 5, weight: 1},
-	"Heavy Machine: Engine":    {Value: 5, weight: 1},
-	"Heavy Machine: Other":     {Value: 5, weight: 1},
-	"Heavy Machine: Turbine":   {Value: 5, weight: 1},
-	"Heavy Machine: Wrecker":   {Value: 5, weight: 1},
+	"Heavy Machine: Boiler":    {Value: 5, weight: 10},
+	"Heavy Machine: Bulldozer": {Value: 5, weight: 10},
+	"Heavy Machine: Crane":     {Value: 5, weight: 10},
+	"Heavy Machine: Engine":    {Value: 5, weight: 10},
+	"Heavy Machine: Other":     {Value: 5, weight: 10},
+	"Heavy Machine: Turbine":   {Value: 5, weight: 10},
+	"Heavy Machine: Wrecker":   {Value: 5, weight: 10},
 }
 
 // KnowledgeSkills is a map of skills.
 var KnowledgeSkills = map[string]Skill{
 	"Knowledge: Accounting":      {Value: 10, weight: 10},
 	"Knowledge: Anthropology":    {Value: 1, weight: 10},
-	"Knowledge: Archaeology":     {Value: 1, weight: 1},
-	"Knowledge: Art History":     {Value: 1, weight: 1},
-	"Knowledge: Business":        {Value: 1, weight: 1},
+	"Knowledge: Archaeology":     {Value: 1, weight: 10},
+	"Knowledge: Art History":     {Value: 1, weight: 10},
+	"Knowledge: Business":        {Value: 1, weight: 10},
 	"Knowledge: Espionage":       {Value: 0, weight: 10},
-	"Knowledge: Folklore":        {Value: 5, weight: 1},
+	"Knowledge: Folklore":        {Value: 5, weight: 10},
 	"Knowledge: Group":           {Value: 0, weight: 10},
 	"Knowledge: History":         {Value: 20, weight: 10},
-	"Knowledge: Law":             {Value: 5, weight: 1},
-	"Knowledge: Linguistics":     {Value: 0, weight: 1},
-	"Knowledge: Literature":      {Value: 5, weight: 1},
-	"Knowledge: Natural History": {Value: 10, weight: 1},
+	"Knowledge: Law":             {Value: 5, weight: 10},
+	"Knowledge: Linguistics":     {Value: 0, weight: 10},
+	"Knowledge: Literature":      {Value: 5, weight: 10},
+	"Knowledge: Natural History": {Value: 10, weight: 10},
 	"Knowledge: Occult":          {Value: 5, weight: 10},
 	"Knowledge: Philosophy":      {Value: 1, weight: 10},
 	"Knowledge: Politics":        {Value: 5, weight: 10},
-	"Knowledge: Region":          {Value: 0, weight: 1},
-	"Knowledge: Religion":        {Value: 5, weight: 1},
+	"Knowledge: Region":          {Value: 0, weight: 10},
+	"Knowledge: Religion":        {Value: 5, weight: 10},
 	"Knowledge: Streetwise":      {Value: 5, weight: 10},
 }
 
 // MedicineSkills is a map of skills.
 var MedicineSkills = map[string]Skill{
-	"Medicine: Dermatology":       {Value: 5, weight: 1},
-	"Medicine: Family Medicine":   {Value: 5, weight: 1},
-	"Medicine: Immunology":        {Value: 5, weight: 1},
-	"Medicine: Internal Medicine": {Value: 5, weight: 1},
-	"Medicine: Neurology":         {Value: 5, weight: 1},
-	"Medicine: Nuclear Medicine":  {Value: 5, weight: 1},
-	"Medicine: Oncology":          {Value: 5, weight: 1},
-	"Medicine: Other":             {Value: 5, weight: 1},
-	"Medicine: Pathology":         {Value: 5, weight: 1},
-	"Medicine: Pediatrics":        {Value: 5, weight: 1},
-	"Medicine: Radiology":         {Value: 5, weight: 1},
-	"Medicine: Surgery":           {Value: 5, weight: 1},
+	"Medicine: Dermatology":       {Value: 5, weight: 10},
+	"Medicine: Family Medicine":   {Value: 5, weight: 10},
+	"Medicine: Immunology":        {Value: 5, weight: 10},
+	"Medicine: Internal Medicine": {Value: 5, weight: 10},
+	"Medicine: Neurology":         {Value: 5, weight: 10},
+	"Medicine: Nuclear Medicine":  {Value: 5, weight: 10},
+	"Medicine: Oncology":          {Value: 5, weight: 10},
+	"Medicine: Other":             {Value: 5, weight: 10},
+	"Medicine: Pathology":         {Value: 5, weight: 10},
+	"Medicine: Pediatrics":        {Value: 5, weight: 10},
+	"Medicine: Radiology":         {Value: 5, weight: 10},
+	"Medicine: Surgery":           {Value: 5, weight: 10},
 }
 
 // PerformSkills is a map of skills.
 var PerformSkills = map[string]Skill{
-	"Perform: Act":             {Value: 5, weight: 1},
-	"Perform: Dance":           {Value: 5, weight: 1},
-	"Perform: Juggle":          {Value: 5, weight: 1},
-	"Perform: Other":           {Value: 5, weight: 1},
-	"Perform: Play Instrument": {Value: 5, weight: 1},
-	"Perform: Recite":          {Value: 5, weight: 1},
-	"Perform: Sing":            {Value: 5, weight: 1},
+	"Perform: Act":             {Value: 5, weight: 10},
+	"Perform: Dance":           {Value: 5, weight: 10},
+	"Perform: Juggle":          {Value: 5, weight: 10},
+	"Perform: Other":           {Value: 5, weight: 10},
+	"Perform: Play Instrument": {Value: 5, weight: 10},
+	"Perform: Recite":          {Value: 5, weight: 10},
+	"Perform: Sing":            {Value: 5, weight: 10},
 }
 
 // PilotSkills is a map of skills.
 var PilotSkills = map[string]Skill{
-	"Pilot: Battleship":      {Value: 0, weight: 1},
-	"Pilot: Helicopter":      {Value: 0, weight: 1},
-	"Pilot: Hot Air Balloon": {Value: 0, weight: 1},
-	"Pilot: Hovercraft":      {Value: 0, weight: 1},
-	"Pilot: Jet Airliner":    {Value: 0, weight: 1},
-	"Pilot: Jet Boat":        {Value: 0, weight: 1},
-	"Pilot: Jet Fighter":     {Value: 0, weight: 1},
-	"Pilot: Ocean Liner":     {Value: 0, weight: 1},
-	"Pilot: Propeller Plane": {Value: 0, weight: 1},
+	"Pilot: Battleship":      {Value: 0, weight: 10},
+	"Pilot: Helicopter":      {Value: 0, weight: 10},
+	"Pilot: Hot Air Balloon": {Value: 0, weight: 10},
+	"Pilot: Hovercraft":      {Value: 0, weight: 10},
+	"Pilot: Jet Airliner":    {Value: 0, weight: 10},
+	"Pilot: Jet Boat":        {Value: 0, weight: 10},
+	"Pilot: Jet Fighter":     {Value: 0, weight: 10},
+	"Pilot: Ocean Liner":     {Value: 0, weight: 10},
+	"Pilot: Propeller Plane": {Value: 0, weight: 10},
 }
 
 // LanguageSkills is a map of skills.
@@ -1032,33 +1168,33 @@ var LanguageSkills = map[string]Skill{
 
 // ScienceSkills is a map of skills.
 var ScienceSkills = map[string]Skill{
-	"Science: Astronomy":   {Value: 1, weight: 1},
-	"Science: Biology":     {Value: 1, weight: 1},
-	"Science: Botany":      {Value: 1, weight: 1},
-	"Science: Chemistry":   {Value: 1, weight: 1},
-	"Science: Cyptography": {Value: 1, weight: 1},
+	"Science: Astronomy":   {Value: 1, weight: 10},
+	"Science: Biology":     {Value: 1, weight: 10},
+	"Science: Botany":      {Value: 1, weight: 10},
+	"Science: Chemistry":   {Value: 1, weight: 10},
+	"Science: Cyptography": {Value: 1, weight: 10},
 	"Science: Forensics":   {Value: 1, weight: 10},
-	"Science: Genetics":    {Value: 1, weight: 1},
-	"Science: Geology":     {Value: 1, weight: 1},
+	"Science: Genetics":    {Value: 1, weight: 10},
+	"Science: Geology":     {Value: 1, weight: 10},
 	"Science: Mathematics": {Value: 10, weight: 10},
-	"Science: Meteorology": {Value: 1, weight: 1},
-	"Science: Pharmacy":    {Value: 1, weight: 1},
-	"Science: Physics":     {Value: 1, weight: 1},
-	"Science: Planetology": {Value: 1, weight: 1},
+	"Science: Meteorology": {Value: 1, weight: 10},
+	"Science: Pharmacy":    {Value: 1, weight: 10},
+	"Science: Physics":     {Value: 1, weight: 10},
+	"Science: Planetology": {Value: 1, weight: 10},
 	"Science: Psychology":  {Value: 5, weight: 10},
 	"Science: Thaumaturgy": {Value: 0, weight: 10},
-	"Science: Zoology":     {Value: 5, weight: 1},
+	"Science: Zoology":     {Value: 5, weight: 10},
 }
 
 // TechnologyUseSkills is a map of skills.
 var TechnologyUseSkills = map[string]Skill{
-	"Technology Use: Communications":      {Value: 5, weight: 1},
-	"Technology Use: Electronic Security": {Value: 5, weight: 1},
-	"Technology Use: Electronics":         {Value: 5, weight: 1},
-	"Technology Use: Other":               {Value: 5, weight: 1},
-	"Technology Use: Sensor Systems":      {Value: 5, weight: 1},
-	"Technology Use: Surveillance":        {Value: 5, weight: 1},
-	"Technology Use: Traps":               {Value: 5, weight: 1},
+	"Technology Use: Communications":      {Value: 5, weight: 10},
+	"Technology Use: Electronic Security": {Value: 5, weight: 10},
+	"Technology Use: Electronics":         {Value: 5, weight: 10},
+	"Technology Use: Other":               {Value: 5, weight: 10},
+	"Technology Use: Sensor Systems":      {Value: 5, weight: 10},
+	"Technology Use: Surveillance":        {Value: 5, weight: 10},
+	"Technology Use: Traps":               {Value: 5, weight: 10},
 }
 
 // EsotericSkills is a map of the creepy stuff.
