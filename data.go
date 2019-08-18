@@ -66,7 +66,6 @@ var Professions = map[string]Profession{
 			"COMPUTER USE",
 			 "KNOWLEDGE",
 			 "KNOWLEDGE",
-			 "Language: a programming language",
 			 "Repair: Electrical",
 			 "Repair: Electronics",
 			 "Research",
@@ -76,7 +75,7 @@ var Professions = map[string]Profession{
 			 "Hide",
 			 "Knowledge: Law",
 		},
-		offset: 11,
+		offset: 10,
 		n:      1,
 	},
 	"Clerical Worker": {

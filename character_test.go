@@ -16,9 +16,19 @@ func TestNewCharacter(t *testing.T) {
 			LogLevel: logLevel,
 		},
 		{
+			Profession: "Clerical Worker",
+		},
+		{
+			Profession: "Computer Hacker or Technician",
+		},
+		{
+			Profession: "Antiquarian",
+		},
+		{
 			Name:            "Borkenhekenaken",
 			Gender:          "Male",
 			PersonalityType: "Bruiser",
+			Profession: "Occultist",
 			Seed:            "1575d911f49e59ee",
 			LogLevel:        logLevel,
 		},

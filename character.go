@@ -237,13 +237,26 @@ func (c *Character) rollProfessionSkills() {
 	for _, skill := range skills {
 		m[skill] = AllSkills[skill]
 	}
-	for i := 0; i < points; i++ {
-		skill, _ := getSkill(randomChoice(skills))
+	for points > 0 {
+		weights := []int{}
+		weightTotal := 0
+		for _, s := range skills {
+			weightTotal += c.Skills[s]
+		}
+		for _, s := range skills {
+			w := int(c.Skills[s]+1 / weightTotal * 10)
+			weights = append(weights, w)
+		}
+		skill, _ := getSkill(weightedRandomChoice(skills, weights))
+		if c.Skills[skill] < 75 {
+			skill, _ = getSkill(randomChoice(skills))
+		}
 		if _, ok := c.Skills[skill]; !ok {
 			c.Skills[skill] = 1
 		} else {
 			c.Skills[skill] += 1
 		}
+		points -= 1
 	}
 }
 
