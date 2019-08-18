@@ -204,7 +204,6 @@ func (c *Character) calcAssignmentSkills() {
 
 func (c *Character) rollProfessionSkills() {
 	prof := Professions[c.Profession]
-	fmt.Println(prof)
 	skills := []string{}
 	if prof.n > 0 {
 		skills = prof.skills[0:prof.offset]
