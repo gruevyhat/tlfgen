@@ -810,7 +810,7 @@ var MeleeWeaponSkills = map[string]Skill{
 var MissileWeaponSkills = map[string]Skill{
 	"Missile Weapon: Blowgun":        {Value: 5, weight: 1},
 	"Missile Weapon: Boomerang":      {Value: 5, weight: 1},
-	"Missile Weapon: Bow":            {Value: 5, weight: 20},
+	"Missile Weapon: Bow":            {Value: 5, weight: 10},
 	"Missile Weapon: Crossbow":       {Value: 5, weight: 1},
 	"Missile Weapon: Dart":           {Value: 5, weight: 1},
 	"Missile Weapon: Javelin":        {Value: 5, weight: 1},
@@ -819,23 +819,8 @@ var MissileWeaponSkills = map[string]Skill{
 	"Missile Weapon: Sling":          {Value: 5, weight: 1},
 	"Missile Weapon: Spear":          {Value: 5, weight: 1},
 	"Missile Weapon: Throwing Axe":   {Value: 5, weight: 1},
-	"Missile Weapon: Throwing Knife": {Value: 5, weight: 10},
+	"Missile Weapon: Throwing Knife": {Value: 5, weight: 5},
 }
-
-// TechnicalSkills list of all the possible combat skills.
-var TechnicalSkills = joinMaps(
-	ComputerUseSkills,
-	TechnologyUseSkills,
-)
-
-// CombatSkills list of all the possible combat skills.
-var CombatSkills = joinMaps(
-	ArtillerySkills,
-	FirearmSkills,
-	HeavyWeaponSkills,
-	MeleeWeaponSkills,
-	MissileWeaponSkills,
-)
 
 // DefaultSkills is a map of default skills.
 var DefaultSkills = map[string]Skill{
@@ -844,7 +829,7 @@ var DefaultSkills = map[string]Skill{
 	"Bargain":           {Value: 5, weight: 1},
 	"Brawl":             {Value: 25, weight: 1},
 	"Bureaucracy":       {Value: 5, weight: 1},
-	"Climb":             {Value: 40, weight: 1},
+	"Climb":             {Value: 40, weight: -40},
 	"Command":           {Value: 5, weight: 1},
 	"Demolition":        {Value: 1, weight: 1},
 	"Disguise":          {Value: 5, weight: 1},
@@ -853,7 +838,7 @@ var DefaultSkills = map[string]Skill{
 	"Etiquette":         {Value: 5, weight: 1},
 	"Fast Talk":         {Value: 5, weight: 1},
 	"Fine Manipulation": {Value: 5, weight: 1},
-	"First Aid":         {Value: 30, weight: 1},
+	"First Aid":         {Value: 30, weight: 5},
 	"Gaming":            {Value: 10, weight: 1},
 	"Grapple":           {Value: 25, weight: 1},
 	"Heavy Machine":     {Value: 5, weight: 1},
@@ -1027,7 +1012,7 @@ var LanguageSkills = map[string]Skill{
 	"Language: Latin":    {Value: 0, weight: 5},
 	"Language: Mandarin": {Value: 0, weight: 1},
 	"Language: Other":    {Value: 0, weight: 10},
-	"Language: Own":      {Value: -1, weight: 1},
+	"Language: Own":      {Value: -1, weight: -50},
 	"Language: Spanish":  {Value: 0, weight: 10},
 	"Language: Swahili":  {Value: 0, weight: 1},
 	"Language: Swedish":  {Value: 0, weight: 1},
@@ -1066,9 +1051,24 @@ var TechnologyUseSkills = map[string]Skill{
 
 // EsotericSkills is a map of the creepy stuff.
 var EsotericSkills = map[string]Skill{
-	"Cthulhu Mythos": {Value: 0, weight: 1},
-	"Sorcery":        {Value: 0, weight: 1},
+	"Cthulhu Mythos": {Value: 0, weight: 10},
+	"Sorcery":        {Value: 0, weight: 10},
 }
+
+// TechnicalSkills list of all the possible combat skills.
+var TechnicalSkills = joinMaps(
+	ComputerUseSkills,
+	TechnologyUseSkills,
+)
+
+// CombatSkills list of all the possible combat skills.
+var CombatSkills = joinMaps(
+	ArtillerySkills,
+	FirearmSkills,
+	HeavyWeaponSkills,
+	MeleeWeaponSkills,
+	MissileWeaponSkills,
+)
 
 // GeneralSkills is a map of everything except Combat skills.
 var GeneralSkills = joinMaps(
