@@ -47,7 +47,7 @@ var Professions = map[string]Profession{
 			"Hide",
 			"Insight",
 			"KNOWLEDGE",
-			"Knowledge (Occult)",
+			"Knowledge: Occult",
 			"Listen",
 			"Research",
 			"Sense",
@@ -78,7 +78,7 @@ var Professions = map[string]Profession{
 			"Insight",
 			"KNOWLEDGE",
 			"LANGUAGE",
-			"Language (Own)",
+			"Language: Own",
 			"Listen",
 			"Persuade",
 			"KNOWLEDGE",
@@ -94,9 +94,9 @@ var Professions = map[string]Profession{
 			"Fast Talk",
 			"Insight",
 			"KNOWLEDGE",
-			"Knowledge (Law)",
-			"Language (Own)",
-			"Perform (Oratory)",
+			"Knowledge: Law",
+			"Language: Own",
+			"Perform: Oratory",
 			"Persuade",
 			"Research",
 		},
@@ -115,8 +115,8 @@ var Professions = map[string]Profession{
 			"COMPUTER USE",
 			"Fine Manipulation",
 			"LANGUAGE",
-			"Repair (Mechanical)",
-			"Repair (Structural)",
+			"Repair: Mechanical",
+			"Repair: Structural",
 			"TECHNOLOGY USE",
 		},
 		offset: 6,
@@ -126,14 +126,14 @@ var Professions = map[string]Profession{
 		skills: []string{
 			"Fast Talk",
 			"Insight",
-			"Language (Own)",
+			"Language: Own",
 			"Listen",
 			"Persuade",
 			"Research",
 			"Spot",
-			"Art (Photography)",
+			"Art: Photography",
 			"COMPUTER USE",
-			"Craft (Photography)",
+			"Craft: Photography",
 			"Disguise",
 			"Hide",
 			"KNOWLEDGE",
@@ -150,7 +150,7 @@ var Professions = map[string]Profession{
 			"Fine Manipulation",
 			"REPAIR",
 			"TECHNOLOGY USE",
-			"Art (Drafting)",
+			"Art: Drafting",
 			"ARTILLERY",
 			"Demolition",
 			"Drive",
@@ -168,7 +168,7 @@ var Professions = map[string]Profession{
 	"Doctor": {
 		skills: []string{
 			"First Aid",
-			"Language (Own)",
+			"Language: Own",
 			"Medicine",
 			"Persuade",
 			"Research",
@@ -177,7 +177,7 @@ var Professions = map[string]Profession{
 			"LANGUAGE",
 			"Psychotherapy",
 			"SCIENCE",
-			"Science (Biology)",
+			"Science: Biology",
 		},
 		offset: 6,
 		n:      4,
@@ -679,7 +679,9 @@ var Assignments = map[string]Assignment{
 func assignmentKeys() []string {
 	keys := []string{}
 	for key := range Assignments {
-		keys = append(keys, key)
+		if key != "all" {
+			keys = append(keys, key)
+		}
 	}
 	sort.Strings(keys)
 	return keys
@@ -890,21 +892,21 @@ var ArtSkills = map[string]Skill{
 
 // AthleticsSkills is a map of skills.
 var AthleticsSkills = map[string]Skill{
-	"Athletics: Acrobatics":                     {Value: 10, weight: 1},
-	"Athletics: American and Canadian Football": {Value: 10, weight: 1},
-	"Athletics: Baseball":                       {Value: 10, weight: 1},
-	"Athletics: Basketball":                     {Value: 10, weight: 1},
-	"Athletics: Bowling":                        {Value: 10, weight: 1},
-	"Athletics: Cricket":                        {Value: 10, weight: 1},
-	"Athletics: Cycling":                        {Value: 10, weight: 1},
-	"Athletics: Golf":                           {Value: 10, weight: 1},
-	"Athletics: Hockey":                         {Value: 10, weight: 1},
-	"Athletics: Rugby":                          {Value: 10, weight: 1},
-	"Athletics: Skating":                        {Value: 10, weight: 1},
-	"Athletics: Skiing":                         {Value: 10, weight: 1},
-	"Athletics: Soccer":                         {Value: 10, weight: 1},
-	"Athletics: Tennis":                         {Value: 10, weight: 1},
-	"Athletics: Track & Field":                  {Value: 10, weight: 1},
+	"Athletics: Acrobatics":    {Value: 10, weight: 1},
+	"Athletics: Football":      {Value: 10, weight: 1},
+	"Athletics: Baseball":      {Value: 10, weight: 1},
+	"Athletics: Basketball":    {Value: 10, weight: 1},
+	"Athletics: Bowling":       {Value: 10, weight: 1},
+	"Athletics: Cricket":       {Value: 10, weight: 1},
+	"Athletics: Cycling":       {Value: 10, weight: 1},
+	"Athletics: Golf":          {Value: 10, weight: 1},
+	"Athletics: Hockey":        {Value: 10, weight: 1},
+	"Athletics: Rugby":         {Value: 10, weight: 1},
+	"Athletics: Skating":       {Value: 10, weight: 1},
+	"Athletics: Skiing":        {Value: 10, weight: 1},
+	"Athletics: Soccer":        {Value: 10, weight: 1},
+	"Athletics: Tennis":        {Value: 10, weight: 1},
+	"Athletics: Track & Field": {Value: 10, weight: 1},
 }
 
 // ComputerUseSkills is a map of skills.

@@ -95,7 +95,7 @@ func randomChoice(choices []string) string {
 
 func randomInt(max int) int {
 	// Returns an int in [1..max].
-	return rand.Intn(max + 1)
+	return rand.Intn(max) + 1
 }
 
 func weightedRandomChoice(choices []string, weights []int) string {
