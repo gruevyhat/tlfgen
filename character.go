@@ -4,6 +4,7 @@ package tlfgen
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 
 	logging "github.com/op/go-logging"
 )
@@ -20,6 +21,8 @@ var (
 	twoD6   = Die{code: 2, sides: 6}
 )
 
+const skillmax = 75
+
 // Sets the random seed from a hex hash string.
 func (c *Character) setCharSeed(charSeed string) {
 	var err error
@@ -31,39 +34,10 @@ func (c *Character) setCharSeed(charSeed string) {
 
 // Declare various character data lists.
 var (
-	genders     = []string{"Male", "Female"}
-	assignments = []string{
-		"Archives",
-		"Computational Demonology",
-		"Zombie Wrangler",
-		"Researcher",
-		"Tosher",
-		"Mad Boffin",
-		"Computational Demonology Researcher",
-		"Cultural Attache",
-		"Counter-Possession Exorcist",
-		"Translator",
-		"Apprentice Demonologist",
-		"Plumber",
-		"Occult Forensics",
-		"Medical and Psychological",
-		"Media Relations",
-		"Counter-Subversion",
-		"Information Technology",
-		"Counter-Possession",
-		"Contracts and Bindings",
-	}
-	personalityTypes = []string{"Bruiser", "Nutter", "Master", "Leader", "Slacker", "Thinker"}
-	professions      = []string{
-		"Occultist",
-		"Philosopher",
-		"Consultant",
-		"Computer Hacker or Technician",
-		"Clerical Worker",
-		"Artist or Designer",
-		"Antiquarian",
-	}
-	languages        = []string{"English", "French", "Spanish", "German", "Latin", "Ancient Greek", "Arabic", "Enochian"}
+	genders          = []string{"Male", "Female"}
+	assignments      = assignmentKeys()
+	personalityTypes = personalityTypeKeys()
+	professions      = professionKeys()
 )
 
 // Character represents the primary features of the character.
@@ -165,28 +139,31 @@ func (c *Character) calcDerivedCharacteristics() {
 	c.Derived.Know = c.Base.Education * 5
 }
 
-func (c *Character) getPersonalityType(opt string) {
+func (c *Character) getPersonalityType(opt string) *Character {
 	if opt != "" {
 		c.PersonalityType = opt
 	} else {
 		c.PersonalityType = randomChoice(personalityTypes)
 	}
+	return c
 }
 
-func (c *Character) getProfession(opt string) {
+func (c *Character) getProfession(opt string) *Character {
 	if opt != "" {
 		c.Profession = opt
 	} else {
 		c.Profession = randomChoice(professions)
 	}
+	return c
 }
 
-func (c *Character) getAssignment(opt string) {
+func (c *Character) getAssignment(opt string) *Character {
 	if opt != "" {
 		c.Assignment = opt
 	} else {
 		c.Assignment = randomChoice(assignments)
 	}
+	return c
 }
 
 func (c *Character) calcBaseSkills() {
@@ -227,36 +204,54 @@ func (c *Character) calcAssignmentSkills() {
 
 func (c *Character) rollProfessionSkills() {
 	prof := Professions[c.Profession]
-	skills := prof.skills[0:prof.offset]
+	fmt.Println(prof)
+	skills := []string{}
+	if prof.n > 0 {
+		skills = prof.skills[0:prof.offset]
+	} else {
+		skills = prof.skills
+	}
+	// Set randomized skills
 	randSkills := prof.skills[prof.offset:]
+	sort.Strings(randSkills)
 	for i := 0; i < prof.n; i++ {
 		skills = append(skills, randomChoice(randSkills))
 	}
-	points := c.Base.Education * 20
-	m := make(map[string]Skill)
-	for _, skill := range skills {
-		m[skill] = AllSkills[skill]
+	// Resolve skill names
+	for i, s := range skills {
+		skills[i], _ = getSkill(s)
 	}
-	for points > 0 {
+	// Roll skill points
+	//fmt.Println(skills)
+	c.rollSkillPoints(skills, c.Base.Education*20, skillmax)
+}
+
+func (c *Character) rollAdditionalSkillPoints(points int) {
+	skills := []string{}
+	for skill := range c.Skills {
+		skills = append(skills, skill)
+	}
+	c.rollSkillPoints(skills, points, 95)
+}
+
+func (c *Character) rollSkillPoints(skills []string, points, max int) {
+	sort.Strings(skills)
+	for points := points; points > 0; points-- {
 		weights := []int{}
 		weightTotal := 0
 		for _, s := range skills {
 			weightTotal += c.Skills[s]
 		}
 		for _, s := range skills {
-			w := int(c.Skills[s]+1 / weightTotal * 10)
+			w := int(float64((c.Skills[s])+AllSkills[s].weight+10) / float64(weightTotal) * 100)
+			if c.Skills[s] >= max {
+				w = 0
+			}
 			weights = append(weights, w)
 		}
-		skill, _ := getSkill(weightedRandomChoice(skills, weights))
-		if c.Skills[skill] < 75 {
-			skill, _ = getSkill(randomChoice(skills))
-		}
-		if _, ok := c.Skills[skill]; !ok {
-			c.Skills[skill] = 1
-		} else {
-			c.Skills[skill] += 1
-		}
-		points -= 1
+		//fmt.Println(weights)
+		skill := weightedRandomChoice(skills, weights)
+		c.Skills[skill]++
 	}
 }
 
@@ -275,14 +270,18 @@ func (c *Character) setAge(age int) {
 	} else {
 		c.Age = twoD6.roll() + 17
 	}
-	c.Base.Education += c.Age / 10
+	c.Base.Education += int(float64(c.Age) / 10.0)
 	for a := c.Age - 40; a > 40; a += 10 {
 		r := randomInt(3)
 		switch r {
-		case 0: c.Base.Strength -= 1
-		case 1: c.Base.Constitution -= 1
-		case 2: c.Base.Dexterity -= 1
-		case 3: c.Base.Charisma -= 1
+		case 0:
+			c.Base.Strength--
+		case 1:
+			c.Base.Constitution--
+		case 2:
+			c.Base.Dexterity--
+		case 3:
+			c.Base.Charisma--
 		}
 	}
 }
@@ -330,9 +329,10 @@ type Opts struct {
 	Name            string `docopt:"--name"`
 	Age             int    `docopt:"--age"`
 	Gender          string `docopt:"--gender"`
-	PersonalityType string `docopt:"--personality_type"`
+	PersonalityType string `docopt:"--personality"`
 	Assignment      string `docopt:"--assignment"`
 	Profession      string `docopt:"--profession"`
+	SkillPoints     int    `docopt:"--skill-points"`
 	LogLevel        string `docopt:"--log-level"`
 	Seed            string `docopt:"--seed"`
 }
@@ -349,16 +349,17 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	log.Info("Generating characteristics.")
 	c.setGender(opts.Gender)
 	c.setName(opts.Name)
-	c.setAge(opts.Age)
+
 	c.rollBaseCharacteristics()
+	c.setAge(opts.Age)
 	c.calcDerivedCharacteristics()
-	c.getPersonalityType(opts.PersonalityType)
-	c.getProfession(opts.Profession)
-	c.getAssignment(opts.Assignment)
 	c.calcBaseSkills()
-	c.calcPersonalitySkills()
-	c.calcAssignmentSkills()
-	c.rollProfessionSkills()
+
+	c.getProfession(opts.Profession).rollProfessionSkills()
+	c.getPersonalityType(opts.PersonalityType).calcPersonalitySkills()
+	c.getAssignment(opts.Assignment).calcAssignmentSkills()
+
+	c.rollAdditionalSkillPoints(opts.SkillPoints)
 
 	// Generate stuff
 	//c.setWeapons()

@@ -53,6 +53,13 @@ func hash(s string) uint32 {
 	return h.Sum32()
 }
 
+func minInt(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
+
 func setSeed(charHash string) (string, error) {
 	if charHash == "" {
 		defaultSeed := time.Now().UTC().UnixNano()
@@ -78,13 +85,17 @@ func sampleWithoutReplacement(choices []string, n int) []string {
 }
 
 func randomChoice(choices []string) string {
-	r := rand.Intn(len(choices))
-	return choices[r]
+	n := len(choices)
+	if n > 0 {
+		r := rand.Intn(n)
+		return choices[r]
+	}
+	return ""
 }
 
 func randomInt(max int) int {
 	// Returns an int in [1..max].
-	return rand.Intn(max) + 1
+	return rand.Intn(max + 1)
 }
 
 func weightedRandomChoice(choices []string, weights []int) string {
