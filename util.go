@@ -16,7 +16,7 @@ import (
 	randomdata "github.com/Pallinder/go-randomdata"
 )
 
-var r = rand.New(rand.NewSource(42))
+var RAND = rand.New(rand.NewSource(42))
 var dataDir = setDataDir()
 
 func setDataDir() string {
@@ -73,13 +73,13 @@ func setSeed(charHash string) (string, error) {
 		return charHash, err
 	}
 	seed := binary.BigEndian.Uint64(h)
-	rand.Seed(int64(seed))
+	RAND.Seed(int64(seed))
 	log.Info("Set new seed:", seed)
 	return charHash, nil
 }
 
 func randomName(gender string) string {
-	randomdata.CustomRand(r)
+	randomdata.CustomRand(RAND)
 	var name string
 	switch gender {
 	case "Male":
@@ -92,7 +92,7 @@ func randomName(gender string) string {
 
 func sampleWithoutReplacement(choices []string, n int) []string {
 	samples := []string{}
-	idxs := rand.Perm(len(choices))
+	idxs := RAND.Perm(len(choices))
 	for i := 0; i < n; i++ {
 		samples = append(samples, choices[idxs[i]])
 	}
@@ -102,7 +102,7 @@ func sampleWithoutReplacement(choices []string, n int) []string {
 func randomChoice(choices []string) string {
 	n := len(choices)
 	if n > 0 {
-		r := rand.Intn(n)
+		r := RAND.Intn(n)
 		return choices[r]
 	}
 	return ""
@@ -110,7 +110,7 @@ func randomChoice(choices []string) string {
 
 func randomInt(max int) int {
 	// Returns an int in [1..max].
-	return rand.Intn(max) + 1
+	return RAND.Intn(max) + 1
 }
 
 func weightedRandomChoice(choices []string, weights []int) string {

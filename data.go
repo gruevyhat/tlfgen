@@ -735,6 +735,8 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(PerformSkills)
 	case "PILOT":
 		name, newSkill = randomWeightedSkillChoice(PilotSkills)
+	case "REPAIR":
+		name, newSkill = randomWeightedSkillChoice(RepairSkills)
 	case "ART":
 		name, newSkill = randomWeightedSkillChoice(ArtSkills)
 	case "TECHNOLOGY USE":
@@ -904,6 +906,16 @@ var ComputerUseSkills = map[string]Skill{
 	"Computer Use: Other":       {Value: 5, weight: 1},
 	"Computer Use: Programming": {Value: 5, weight: 10},
 	"Computer Use: Repair":      {Value: 5, weight: 10},
+}
+
+// RepairSkills is a map of skills.
+var RepairSkills = map[string]Skill{
+	"Repair: Electrical": {Value: 5, weight: 1},
+	"Repair: Electronic": {Value: 5, weight: 1},
+	"Repair: Hydraulic":  {Value: 5, weight: 1},
+	"Repair: Mechanical": {Value: 5, weight: 1},
+	"Repair: Plumbing":   {Value: 5, weight: 1},
+	"Repair: Structural": {Value: 5, weight: 1},
 }
 
 // CraftSkills is a map of skills.
