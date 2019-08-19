@@ -49,11 +49,11 @@ type Character struct {
 	PersonalityType string                 `json:"personality_type"`
 	Assignment      string                 `json:"assignment"`
 	Profession      string                 `json:"profession"`
-	Skills          map[string]int         `json:"skills"`
-	Seed            string                 `json:"seed"`
+	Wealth          string                 `json:"wealth"`
 	Base            BaseCharacteristics    `json:"base"`
 	Derived         DerivedCharacteristics `json:"derived"`
-	Wealth          string                 `json:"wealth"`
+	Skills          map[string]int         `json:"skills"`
+	Seed            string                 `json:"seed"`
 	//Description string     `json:"description"`
 	//Weapons     []Weapon   `json:"weapons"`
 	//Equipment   []string   `json:"equipment"`
