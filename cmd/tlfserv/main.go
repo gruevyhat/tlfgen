@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"runtime"
+	"strconv"
 	"sync"
 
 	"github.com/docopt/docopt-go"
@@ -31,17 +32,19 @@ var cmdOpts struct {
 }
 
 func generate(w http.ResponseWriter, r *http.Request) {
+	age, err := strconv.Atoi(r.URL.Query().Get("age"))
+	skillPoints, err := strconv.Atoi(r.URL.Query().Get("skill-points"))
 	charOpts := tlfgen.Opts{
 		Name:            r.URL.Query().Get("name"),
-		Age:             r.URL.Query().Get("age"),
+		Age:             age,
 		Gender:          r.URL.Query().Get("gender"),
 		PersonalityType: r.URL.Query().Get("personality-type"),
 		Assignment:      r.URL.Query().Get("assignment"),
 		Profession:      r.URL.Query().Get("profession"),
-		SkillPoints:     r.URL.Query().Get("skill-points"),
+		SkillPoints:     skillPoints,
 		AttributeBonus:  r.URL.Query().Get("attribute-bonus"),
 		Seed:            r.URL.Query().Get("seed"),
-		LogLevel:        "ERROR",
+		LogLevel:        "INFO",
 	}
 	mutex.Lock()
 	c, err := tlfgen.NewCharacter(charOpts)
