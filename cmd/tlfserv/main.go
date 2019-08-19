@@ -1,3 +1,4 @@
+// Package main implements a simple web service for tlfgen.
 package main
 
 import (
@@ -10,14 +11,14 @@ import (
 
 	"github.com/docopt/docopt-go"
 	"github.com/gorilla/mux"
-	"github.com/gruevyhat/sotdlgen"
+	"github.com/gruevyhat/tlfgen"
 )
 
 var mutex sync.Mutex
 
-var usage = `M6IK Character Generation Service
+var usage = `The Laundry Files Character Generation Service
 
-Usage: m6ikserv [options]
+Usage: tlfserv [options]
 
 Options:
   --port PORT	  The listening port. [default: 8080]
@@ -30,19 +31,20 @@ var cmdOpts struct {
 }
 
 func generate(w http.ResponseWriter, r *http.Request) {
-	charOpts := sotdlgen.Opts{
-		Name:       r.URL.Query().Get("name"),
-		Gender:     r.URL.Query().Get("gender"),
-		Level:      r.URL.Query().Get("level"),
-		Ancestry:   r.URL.Query().Get("ancestry"),
-		ExpertPath: r.URL.Query().Get("expert-path"),
-		MasterPath: r.URL.Query().Get("master-path"),
-		NovicePath: r.URL.Query().Get("novice-path"),
-		Seed:       r.URL.Query().Get("seed"),
-		LogLevel:   "ERROR",
+	charOpts := tlfgen.Opts{
+		Name:            r.URL.Query().Get("name"),
+		Age:             r.URL.Query().Get("age"),
+		Gender:          r.URL.Query().Get("gender"),
+		PersonalityType: r.URL.Query().Get("personality-type"),
+		Assignment:      r.URL.Query().Get("assignment"),
+		Profession:      r.URL.Query().Get("profession"),
+		SkillPoints:     r.URL.Query().Get("skill-points"),
+		AttributeBonus:  r.URL.Query().Get("attribute-bonus"),
+		Seed:            r.URL.Query().Get("seed"),
+		LogLevel:        "ERROR",
 	}
 	mutex.Lock()
-	c, err := sotdlgen.NewCharacter(charOpts)
+	c, err := tlfgen.NewCharacter(charOpts)
 	if err != nil {
 		fmt.Println("An error occurred:", err)
 	}
@@ -54,7 +56,7 @@ func main() {
 	optFlags, _ := docopt.ParseDoc(usage)
 	optFlags.Bind(&cmdOpts)
 
-	fmt.Printf("SotDL Character Generation Service started at <http://localhost:%s>\n", cmdOpts.Port)
+	fmt.Printf("Service started at <http://localhost:%s>\n", cmdOpts.Port)
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	router := mux.NewRouter()

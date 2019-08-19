@@ -11,7 +11,7 @@ import (
 
 var usage = `The Laundry Files Character Generator
 
-Usage: tlf [options]
+Usage: tlfgen [options]
 
 Options:
   -n, --name=<str>          The character's full name.
