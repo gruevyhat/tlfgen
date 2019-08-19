@@ -1,7 +1,6 @@
 package tlfgen
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 )
@@ -28,7 +27,8 @@ func TestNewCharacter(t *testing.T) {
 			Name:            "Borkenhekenaken",
 			Gender:          "Male",
 			PersonalityType: "Bruiser",
-			Profession: "Occultist",
+			Profession:      "Military Officer",
+			Assignment:      "Plumber",
 			Seed:            "1575d911f49e59ee",
 			LogLevel:        logLevel,
 		},
@@ -45,6 +45,6 @@ func TestNewCharacter(t *testing.T) {
 			g := strings.Join(genders, ", ")
 			t.Errorf("Incorrect gender. Expected '%s' in '%s'.", c.Gender, g)
 		}
-		fmt.Println(c.ToJSON(true))
+		log.Info(c.ToJSON(true))
 	}
 }

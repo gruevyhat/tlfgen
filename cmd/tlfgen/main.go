@@ -21,6 +21,7 @@ Options:
   -A, --assignment=<str>    The character's assignment.
   -P, --profession=<str>    The character's profession.
 	-S, --skill-points=<str>  The character's bonus skill points. [default: 0]
+	-b, --attr-bonus=<str>    The character's attribute bonuses ("smart", "tough", or "mystical".
   -s, --seed=<hex>          Character generation signature.
   --log-level=<str>         One of {INFO, WARNING, ERROR}. [default: ERROR]
   -h --help

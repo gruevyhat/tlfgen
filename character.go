@@ -19,6 +19,7 @@ var (
 	}
 	threeD6 = Die{code: 3, sides: 6}
 	twoD6   = Die{code: 2, sides: 6}
+	oneD3   = Die{code: 1, sides: 3}
 )
 
 const skillmax = 75
@@ -95,17 +96,32 @@ type Weapon struct {
 	Damage Die    `json:"damage"`
 }
 
-func (c *Character) rollBaseCharacteristics() {
+func (c *Character) rollBaseCharacteristics(bonus string) {
+	log.Info("Rolling base characteristics.")
 	c.Base.Strength = threeD6.roll()
 	c.Base.Constitution = threeD6.roll()
 	c.Base.Power = threeD6.roll()
 	c.Base.Dexterity = threeD6.roll()
 	c.Base.Charisma = threeD6.roll()
-
 	c.Base.Size = twoD6.roll() + 6
 	c.Base.Intelligence = twoD6.roll() + 6
-
 	c.Base.Education = threeD6.roll() + 3
+	switch bonus {
+	case "smart":
+		log.Info("Increasing bonus characteristics:", bonus)
+		c.Base.Intelligence += oneD3.roll()
+		c.Base.Education += oneD3.roll()
+		c.Base.Dexterity += oneD3.roll()
+	case "tough":
+		log.Info("Increasing bonus characteristics:", bonus)
+		c.Base.Strength += oneD3.roll()
+		c.Base.Constitution += oneD3.roll()
+		c.Base.Size += oneD3.roll()
+	case "mystical":
+		log.Info("Increasing bonus characteristics:", bonus)
+		c.Base.Power += oneD3.roll()
+		c.Base.Charisma += oneD3.roll()
+	}
 }
 
 func getDamageBonus(n int) (code string) {
@@ -126,12 +142,13 @@ func getDamageBonus(n int) (code string) {
 }
 
 func (c *Character) calcDerivedCharacteristics() {
+	log.Info("Adding derived characteristics.")
 	c.Derived.DamageBonus = getDamageBonus(c.Base.Strength + c.Base.Size)
 	c.Derived.HitPoints = (c.Base.Constitution + c.Base.Size) / 2
 	c.Derived.MajorWoundLevel = c.Derived.HitPoints / 2
 	c.Derived.ExperienceBonus = c.Base.Intelligence / 2
 	c.Derived.Move = 10
-	c.Derived.Sanity = c.Base.Power
+	c.Derived.Sanity = c.Base.Power * 5
 	c.Derived.Effort = c.Base.Strength * 5
 	c.Derived.Endurance = c.Base.Constitution * 5
 	c.Derived.Idea = c.Base.Intelligence * 5
@@ -141,6 +158,11 @@ func (c *Character) calcDerivedCharacteristics() {
 }
 
 func (c *Character) getPersonalityType(opt string) *Character {
+	log.Info("Setting personality type.")
+	if !arrayContains(personalityTypes, opt) {
+		log.Error("Personality type not found. Randomizing.")
+		opt = ""
+	}
 	if opt != "" {
 		c.PersonalityType = opt
 	} else {
@@ -150,6 +172,11 @@ func (c *Character) getPersonalityType(opt string) *Character {
 }
 
 func (c *Character) getProfession(opt string) *Character {
+	log.Info("Setting profession.")
+	if !arrayContains(professions, opt) {
+		log.Error("Profession not found. Randomizing.")
+		opt = ""
+	}
 	if opt != "" {
 		c.Profession = opt
 	} else {
@@ -160,6 +187,11 @@ func (c *Character) getProfession(opt string) *Character {
 }
 
 func (c *Character) getAssignment(opt string) *Character {
+	log.Info("Setting assignment.")
+	if !arrayContains(assignments, opt) {
+		log.Error("Assignment not found. Randomizing.")
+		opt = ""
+	}
 	if opt != "" {
 		c.Assignment = opt
 	} else {
@@ -171,9 +203,12 @@ func (c *Character) getAssignment(opt string) *Character {
 func (c *Character) calcBaseSkills() {
 	c.Skills = make(map[string]int)
 	for name, skill := range DefaultSkills {
-		c.Skills[name] = skill.Value
+		log.Info("Adding base skill:", name)
+		c.Skills[name] = skill.base
 	}
+	log.Info("Adding base skill: Language: Own")
 	c.Skills["Language: Own"] = c.Base.Intelligence * 5
+	log.Info("Adding base skill: Dodge")
 	c.Skills["Dodge"] = c.Base.Dexterity * 2
 }
 
@@ -181,24 +216,29 @@ func (c *Character) calcPersonalitySkills() {
 	for _, name := range PersonalityTypes[c.PersonalityType].skills {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
-			c.Skills[name] = newSkill.Value
+			log.Info("Adding personality type skill:", name)
+			c.Skills[name] = newSkill.base
 		}
 		c.Skills[name] += PersonalityTypes[c.PersonalityType].bonus
 	}
 }
 
 func (c *Character) calcAssignmentSkills() {
+	// Primary assignment skills
 	for _, name := range Assignments[c.Assignment].skills {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
-			c.Skills[name] = newSkill.Value
+			log.Info("Adding assignment skill:", name)
+			c.Skills[name] = newSkill.base
 		}
 		c.Skills[name] += Assignments[c.Assignment].bonus
 	}
+	// All assignments skills
 	for _, name := range Assignments["all"].skills {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
-			c.Skills[name] = newSkill.Value
+			log.Info("Adding assignment skill:", name)
+			c.Skills[name] = newSkill.base
 		}
 		c.Skills[name] += Assignments["all"].bonus
 	}
@@ -221,9 +261,11 @@ func (c *Character) rollProfessionSkills() {
 	// Resolve skill names
 	for i, s := range skills {
 		skills[i], _ = getSkill(s)
+		log.Info("Adding professional skill:", skills[i])
 	}
 	// Roll skill points
 	//fmt.Println(skills)
+	log.Info("Rolling professional skill points.")
 	c.rollSkillPoints(skills, c.Base.Education*20, skillmax)
 }
 
@@ -232,6 +274,7 @@ func (c *Character) rollAdditionalSkillPoints(points int) {
 	for skill := range c.Skills {
 		skills = append(skills, skill)
 	}
+	log.Info("Rolling additional skill points.")
 	c.rollSkillPoints(skills, points, 95)
 }
 
@@ -254,10 +297,16 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) {
 		skill := weightedRandomChoice(skills, weights)
 		c.Skills[skill]++
 	}
+	for k, v := range c.Skills {
+		if v != AllSkills[k].base {
+			log.Info(fmt.Sprintf("Set skill: %s, %d%%.", k, v))
+		}
+	}
 }
 
 // Randomly sample from gender list.
 func (c *Character) setGender(gender string) {
+	log.Info("Setting gender.")
 	if gender != "" {
 		c.Gender = gender
 	} else {
@@ -266,6 +315,7 @@ func (c *Character) setGender(gender string) {
 }
 
 func (c *Character) setAge(age int) {
+	log.Info("Setting age and Edu bonus.")
 	if age != 0 {
 		c.Age = age
 	} else {
@@ -273,6 +323,7 @@ func (c *Character) setAge(age int) {
 	}
 	c.Base.Education += int(float64(c.Age) / 10.0)
 	for a := c.Age - 40; a > 40; a += 10 {
+		log.Info("Calculating age penalty.")
 		r := randomInt(3)
 		switch r {
 		case 0:
@@ -288,6 +339,7 @@ func (c *Character) setAge(age int) {
 }
 
 func (c *Character) setName(name string) {
+	log.Info("Setting Name.")
 	if name != "" {
 		c.Name = name
 	} else {
@@ -334,6 +386,7 @@ type Opts struct {
 	Assignment      string `docopt:"--assignment"`
 	Profession      string `docopt:"--profession"`
 	SkillPoints     int    `docopt:"--skill-points"`
+	AttributeBonus  string `docopt:"--attr-bonus"`
 	LogLevel        string `docopt:"--log-level"`
 	Seed            string `docopt:"--seed"`
 }
@@ -351,7 +404,7 @@ func NewCharacter(opts Opts) (c Character, err error) {
 	c.setGender(opts.Gender)
 	c.setName(opts.Name)
 
-	c.rollBaseCharacteristics()
+	c.rollBaseCharacteristics(opts.AttributeBonus)
 	c.setAge(opts.Age)
 	c.calcDerivedCharacteristics()
 	c.calcBaseSkills()
