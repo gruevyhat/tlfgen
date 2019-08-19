@@ -52,7 +52,9 @@ func generate(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("An error occurred:", err)
 	}
 	mutex.Unlock()
-	json.NewEncoder(w).Encode(c)
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "    ")
+	enc.Encode(c)
 }
 
 func main() {
