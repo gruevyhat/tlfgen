@@ -34,7 +34,7 @@ Character generator for the Laundry Files RPG.
 
 ## Example
 
-    $ tflgen -A "Computational Demonology" -P "Parapsychologist" -p "Thinker" -S 200 | jq -c '.'
+    $ tflgen -A "Computational Demonology" -P "Parapsychologist" -p "Thinker" -S 200
     {
         "name": "Jacob Garcia",
         "age": 19,
