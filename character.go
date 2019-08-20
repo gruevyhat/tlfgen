@@ -24,12 +24,13 @@ var (
 const skillmax = 75
 
 // Sets the random seed from a hex hash string.
-func (c *Character) setCharSeed(charSeed string) {
+func (c *Character) setCharSeed(charSeed string) *Character {
 	var err error
 	c.Seed, err = setSeed(charSeed)
 	if err != nil {
 		log.Error("Failed to set character hash: ", err)
 	}
+	return c
 }
 
 // Declare various character data lists.
@@ -95,7 +96,7 @@ type Weapon struct {
 	Damage Die    `json:"damage"`
 }
 
-func (c *Character) rollBaseCharacteristics(bonus string) {
+func (c *Character) rollBaseCharacteristics(bonus string) *Character {
 	c.Base.Strength = threeD6.roll()
 	c.Base.Constitution = threeD6.roll()
 	c.Base.Power = threeD6.roll()
@@ -121,6 +122,7 @@ func (c *Character) rollBaseCharacteristics(bonus string) {
 	if bonus != "" {
 		log.Info("Applied '", bonus, "' bonus: ", c.Base)
 	}
+	return c
 }
 
 func getDamageBonus(n int) (code string) {
@@ -140,7 +142,7 @@ func getDamageBonus(n int) (code string) {
 	}
 }
 
-func (c *Character) calcDerivedCharacteristics() {
+func (c *Character) calcDerivedCharacteristics() *Character {
 	c.Derived.DamageBonus = getDamageBonus(c.Base.Strength + c.Base.Size)
 	c.Derived.HitPoints = (c.Base.Constitution + c.Base.Size) / 2
 	c.Derived.MajorWoundLevel = c.Derived.HitPoints / 2
@@ -154,6 +156,7 @@ func (c *Character) calcDerivedCharacteristics() {
 	c.Derived.Agility = c.Base.Dexterity * 5
 	c.Derived.Know = c.Base.Education * 5
 	log.Info("Added derived characteristics: ", c.Derived)
+	return c
 }
 
 func (c *Character) setPersonalityType(opt string) *Character {
@@ -199,7 +202,7 @@ func (c *Character) setAssignment(opt string) *Character {
 	return c
 }
 
-func (c *Character) calcBaseSkills() {
+func (c *Character) calcBaseSkills() *Character {
 	c.Skills = make(map[string]int)
 	for name, skill := range DefaultSkills {
 		c.Skills[name] = skill.base
@@ -209,9 +212,10 @@ func (c *Character) calcBaseSkills() {
 	log.Info("Added base skill: Language: Own")
 	c.Skills["Dodge"] = c.Base.Dexterity * 2
 	log.Info("Added base skill: Dodge")
+	return c
 }
 
-func (c *Character) calcPersonalitySkills() {
+func (c *Character) calcPersonalitySkills() *Character {
 	for _, name := range PersonalityTypes[c.PersonalityType].skills {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
@@ -220,9 +224,10 @@ func (c *Character) calcPersonalitySkills() {
 		}
 		c.Skills[name] += PersonalityTypes[c.PersonalityType].bonus
 	}
+	return c
 }
 
-func (c *Character) calcAssignmentSkills() {
+func (c *Character) calcAssignmentSkills() *Character {
 	// Primary assignment skills
 	for _, name := range Assignments[c.Assignment].skills {
 		name, newSkill := getSkill(name)
@@ -241,9 +246,10 @@ func (c *Character) calcAssignmentSkills() {
 		}
 		c.Skills[name] += Assignments["all"].bonus
 	}
+	return c
 }
 
-func (c *Character) rollProfessionSkills() {
+func (c *Character) rollProfessionSkills() *Character {
 	prof := Professions[c.Profession]
 	skills := []string{}
 	if prof.n > 0 {
@@ -265,18 +271,20 @@ func (c *Character) rollProfessionSkills() {
 	// Roll skill points
 	log.Info("Rolling professional skill points.")
 	c.rollSkillPoints(skills, c.Base.Education*20, skillmax)
+	return c
 }
 
-func (c *Character) rollAdditionalSkillPoints(points int) {
+func (c *Character) rollAdditionalSkillPoints(points int) *Character {
 	skills := []string{}
 	for skill := range c.Skills {
 		skills = append(skills, skill)
 	}
 	log.Info("Rolling additional skill points.")
 	c.rollSkillPoints(skills, points, 95)
+	return c
 }
 
-func (c *Character) rollSkillPoints(skills []string, points, max int) {
+func (c *Character) rollSkillPoints(skills []string, points, max int) *Character {
 	sort.Strings(skills)
 	for points := points; points > 0; points-- {
 		weights := []int{}
@@ -299,19 +307,21 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) {
 			log.Info(fmt.Sprintf("Set skill: %s, %d%%.", k, v))
 		}
 	}
+	return c
 }
 
 // Randomly sample from gender list.
-func (c *Character) setGender(gender string) {
+func (c *Character) setGender(gender string) *Character {
 	if gender != "" {
 		c.Gender = gender
 	} else {
 		c.Gender = randomChoice(genders)
 	}
 	log.Info("Set gender: ", c.Gender)
+	return c
 }
 
-func (c *Character) setAge(age int) {
+func (c *Character) setAge(age int) *Character {
 	if age != 0 {
 		c.Age = age
 	} else {
@@ -336,15 +346,17 @@ func (c *Character) setAge(age int) {
 			c.Base.Charisma--
 		}
 	}
+	return c
 }
 
-func (c *Character) setName(name string) {
+func (c *Character) setName(name string) *Character {
 	if name != "" {
 		c.Name = name
 	} else {
 		c.Name = randomName(c.Gender)
 	}
 	log.Info("Set name: ", c.Name)
+	return c
 }
 
 // TODO: Additional character data functions.
@@ -397,23 +409,20 @@ func NewCharacter(opts Opts) (c Character, err error) {
 
 	log.SetLevel(logLevels[opts.LogLevel])
 
-	// Initialize character and set random seed from hash
-	c.setCharSeed(opts.Seed)
-
-	// Generate character
-	c.setGender(opts.Gender)
-	c.setName(opts.Name)
-
-	c.rollBaseCharacteristics(opts.AttributeBonus)
-	c.setAge(opts.Age)
-	c.calcDerivedCharacteristics()
-	c.calcBaseSkills()
-
-	c.setPersonalityType(opts.PersonalityType).calcPersonalitySkills()
-	c.setProfession(opts.Profession).rollProfessionSkills()
-	c.setAssignment(opts.Assignment).calcAssignmentSkills()
-
-	c.rollAdditionalSkillPoints(opts.SkillPoints)
+	c.setCharSeed(opts.Seed).
+		setGender(opts.Gender).
+		setName(opts.Name).
+		rollBaseCharacteristics(opts.AttributeBonus).
+		setAge(opts.Age).
+		calcDerivedCharacteristics().
+		calcBaseSkills().
+		setPersonalityType(opts.PersonalityType).
+		calcPersonalitySkills().
+		setProfession(opts.Profession).
+		rollProfessionSkills().
+		setAssignment(opts.Assignment).
+		calcAssignmentSkills().
+		rollAdditionalSkillPoints(opts.SkillPoints)
 
 	// Generate stuff
 	//c.setWeapons()
