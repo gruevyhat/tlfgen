@@ -461,7 +461,8 @@ var Professions = map[string]Profession{
 	},
 }
 
-func professionKeys() []string {
+// ListProfessionKeys lists all the profession types.
+func ListProfessionKeys() []string {
 	keys := []string{}
 	for key := range Professions {
 		keys = append(keys, key)
@@ -532,7 +533,7 @@ var PersonalityTypes = map[string]PersonalityType{
 		special: "",
 	},
 	"Master": {
-		bonus: 20,
+		bonus: 21,
 		desc:  "Your character believes that technique, craft and expertise are the keys to success.",
 		skills: []string{
 			"Appraise",
@@ -593,7 +594,8 @@ var PersonalityTypes = map[string]PersonalityType{
 	},
 }
 
-func personalityTypeKeys() []string {
+// ListPersonalityTypeKeys lists all the personality types.
+func ListPersonalityTypeKeys() []string {
 	keys := []string{}
 	for key := range PersonalityTypes {
 		keys = append(keys, key)
@@ -813,7 +815,8 @@ var Assignments = map[string]Assignment{
 	},
 }
 
-func assignmentKeys() []string {
+// ListAssignmentKeys lists all the assignment types.
+func ListAssignmentKeys() []string {
 	keys := []string{}
 	for key := range Assignments {
 		if key != "all" {
@@ -916,8 +919,8 @@ var FirearmSkills = map[string]Skill{
 	"Firearm: Assault Rifle":  {base: 15, weight: 5},
 	"Firearm: Esoteric":       {base: 0, weight: 20},
 	"Firearm: Exotic":         {base: 5, weight: 10},
-	"Firearm: Pistol":         {base: 20, weight: 30},
-	"Firearm: Rifle":          {base: 25, weight: 20},
+	"Firearm: Pistol":         {base: 20, weight: 40},
+	"Firearm: Rifle":          {base: 25, weight: 30},
 	"Firearm: Shotgun":        {base: 30, weight: 10},
 	"Firearm: Submachine Gun": {base: 15, weight: 5},
 }
@@ -937,7 +940,7 @@ var MeleeWeaponSkills = map[string]Skill{
 	"Melee Weapon: Axe":     {base: 5, weight: 15},
 	"Melee Weapon: Club":    {base: 5, weight: 10},
 	"Melee Weapon: Garrote": {base: 5, weight: 10},
-	"Melee Weapon: Knife":   {base: 5, weight: 20},
+	"Melee Weapon: Knife":   {base: 5, weight: 30},
 	"Melee Weapon: Other":   {base: 5, weight: 10},
 	"Melee Weapon: Spear":   {base: 5, weight: 10},
 	"Melee Weapon: Staff":   {base: 5, weight: 15},
@@ -949,7 +952,7 @@ var MeleeWeaponSkills = map[string]Skill{
 var MissileWeaponSkills = map[string]Skill{
 	"Missile Weapon: Blowgun":        {base: 5, weight: 10},
 	"Missile Weapon: Boomerang":      {base: 5, weight: 10},
-	"Missile Weapon: Bow":            {base: 5, weight: 20},
+	"Missile Weapon: Bow":            {base: 5, weight: 30},
 	"Missile Weapon: Crossbow":       {base: 5, weight: 10},
 	"Missile Weapon: Dart":           {base: 5, weight: 10},
 	"Missile Weapon: Javelin":        {base: 5, weight: 10},
