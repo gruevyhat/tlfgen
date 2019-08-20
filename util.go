@@ -10,13 +10,15 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	randomdata "github.com/Pallinder/go-randomdata"
+	log "github.com/sirupsen/logrus"
 )
 
-var RAND = rand.New(rand.NewSource(42))
+// RAND is the randomizer.
+var RAND = rand.New(rand.NewSource(time.Now().UnixNano()))
+
 var dataDir = setDataDir()
 
 func setDataDir() string {
@@ -34,7 +36,7 @@ func readJSON(filename string) []byte {
 
 func arrayContains(arr []string, s string) bool {
 	for _, a := range arr {
-		if a == s || strings.HasPrefix(a, s) || strings.HasSuffix(s, a) {
+		if a == s {
 			return true
 		}
 	}

@@ -9,8 +9,7 @@ Character generator for the Laundry Files RPG.
 
     $ git clone https://github.com/gruevyhat/tlfgen
     $ cd tlfgen
-    $ go build -o tlfgen cmd/tlfgen/main.go
-    $ go build -o tlfserv cmd/tlfserv/main.go
+    $ make
 
 ## Usage
 
