@@ -254,17 +254,19 @@ func (c *Character) calcAssignmentSkills() *Character {
 func (c *Character) rollProfessionSkills() *Character {
 	prof := Professions[c.Profession]
 	skills := []string{}
+	// Set randomized skills
 	if prof.n > 0 {
 		skills = prof.skills[0:prof.offset]
+		randSkills := prof.skills[prof.offset:]
+		for _, s := range sampleWithoutReplacement(randSkills, prof.n) {
+			skills = append(skills, s)
+		}
 	} else {
 		skills = prof.skills
 	}
-	// Set randomized skills
-	randSkills := prof.skills[prof.offset:]
-	sort.Strings(randSkills)
-	for i := 0; i < prof.n; i++ {
-		skills = append(skills, randomChoice(randSkills))
-	}
+	//for i := 0; i < prof.n; i++ {
+	//	skills = append(skills, randomChoice(randSkills))
+	//}
 	// Resolve skill names
 	for i, s := range skills {
 		skills[i], _ = getSkill(s)
@@ -301,6 +303,7 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) *Character
 				w = int(float64((c.Skills[s])+AllSkills[s].weight+1) / float64(weightTotal) * 100)
 				weights = append(weights, w)
 				newSkills = append(newSkills, s)
+			} else {
 				log.Warning("Maxed out skill: ", s)
 			}
 		}
@@ -308,10 +311,10 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) *Character
 			log.Warning("No where else to put skill points!")
 			return c
 		}
-		skills = newSkills
-		skill := weightedRandomChoice(skills, weights)
+		skill := weightedRandomChoice(newSkills, weights)
 		c.Skills[skill]++
 		points--
+		skills = newSkills
 	}
 	for k, v := range c.Skills {
 		if v != AllSkills[k].base {
