@@ -53,7 +53,7 @@ var Professions = map[string]Profession{
 			"Medicine",
 			"Perform",
 			"Persuade",
-			"Medicine: Psychotherapy",
+			"Psychotherapy",
 			"REPAIR",
 			"SCIENCE",
 			"TECHNOLOGY USE",
@@ -178,7 +178,6 @@ var Professions = map[string]Profession{
 			"Sense",
 			"Spot",
 			"Stealth",
-			"PSYCHOLOGY",
 		},
 		offset: 0,
 		n:      0,
@@ -692,7 +691,7 @@ var Assignments = map[string]Assignment{
 			"Fine Manipulation",
 			"Knowledge: History",
 			"Knowledge: Occult",
-			"Language: Any",
+			"LANGUAGE",
 			"Sorcery",
 		},
 	},
@@ -797,14 +796,173 @@ var Assignments = map[string]Assignment{
 			"Stealth",
 		},
 	},
-	"Computational Demonology": {
+	"Subterranean Operations Liaison": {
+		bonus: 10,
+		skills: []string{
+			"Bargain",
+			"Knowledge: Architecture",
+			"Knowledge: History",
+			"Knowledge: Occult",
+			"Stealth",
+		},
+	},
+	"Accountant": {
+		bonus: 10,
+		skills: []string{
+			"Appraise",
+			"Bureaucracy",
+			"Knowledge: Accounting",
+			"Knowledge: Business",
+			"Knowledge: Law",
+		},
+	},
+	"Quality Assurance Compliance Officer": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"Knowledge: Business",
+			"Knowledge: Politics",
+			"Status",
+			"Teach",
+		},
+	},
+	"Aquatic Affairs Liaison": {
+		bonus: 10,
+		skills: []string{
+			"Etiquette",
+			"Knowledge: Law",
+			"Knowledge: Linguistics",
+			"Knowledge: Occult",
+			"Swim",
+		},
+	},
+	"Health & Safety Assessment Officer": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"First Aid",
+			"Knowledge: Law",
+			"Science: Biology",
+			"Teach",
+		},
+	},
+	"Shoggoth Keeper": {
+		bonus: 10,
+		skills: []string{
+			"Athletics: Running",
+			"Heavy Weapons: Flamethrower",
+			"Knowledge: Occult",
+			"Science: Biology",
+			"Sorcery",
+		},
+	},
+	"Psychiatrist": {
+		bonus: 10,
+		skills: []string{
+			"First Aid",
+			"Insight",
+			"Knowledge: Occult",
+			"Psychotherapy",
+			"Research",
+		},
+	},
+	"Armoury Clerk": {
+		bonus: 10,
+		skills: []string{
+			"FIREARMS",
+			"FIREARMS",
+			"HEAVY WEAPONS",
+			"Knowledge: Law",
+			"Repair: Weapons",
+		},
+	},
+	"Wiring and Warding Technician": {
+		bonus: 10,
+		skills: []string{
+			"Computer Use: Magic",
+			"Craft: Building",
+			"Knowledge: Occult",
+			"REPAIR",
+			"REPAIR",
+		},
+	},
+	"Helpdesk": {
+		bonus: 10,
+		skills: []string{
+			"COMPUTER USE",
+			"COMPUTER USE",
+			"COMPUTER USE",
+			"Knowledge: Occult",
+			"TECHNOLOGY USE",
+		},
+	},
+	"Courier": {
+		bonus: 10,
+		skills: []string{
+			"Drive: Auto",
+			"Knowledge: Streetwise",
+			"Navigate",
+			"Repair: vehicle",
+			"Sorcery",
+		},
+	},
+	"Monitoring Researcher": {
+		bonus: 10,
+		skills: []string{
+			"Bureaucracy",
+			"KNOWLEDGE",
+			"KNOWLEDGE",
+			"Listen",
+			"Research",
+		},
+	},
+	"Media Relations Researcher": {
+		bonus: 10,
+		skills: []string{
+			"Computer Use: Hacking",
+			"Fast Talk",
+			"Knowledge: Occult",
+			"Knowledge: Politics",
+			"Research",
+		},
+	},
+	"Acquisitions Curator": {
+		bonus: 10,
+		skills: []string{
+			"Knowledge: History",
+			"Knowledge: Occult",
+			"LANGUAGE",
+			"REPAIR",
+			"Science: Thaumaturgy",
+		},
+	},
+	"OCCULUS Support Officer": {
+		bonus: 10,
+		skills: []string{
+			"Command",
+			"FIREARMS",
+			"Listen",
+			"Spot",
+			"Strategy",
+		},
+	},
+	"Mathematical Modelling": {
 		bonus: 10,
 		skills: []string{
 			"COMPUTER USE",
 			"Computer Use: Magic",
+			"Knowledge: Occult",
+			"SCIENCE",
 			"Science: Mathematics",
-			"Science: Thaumaturgy",
-			"Sorcery",
+		},
+	},
+	"Stochastic Analyst": {
+		bonus: 10,
+		skills: []string{
+			"KNOWLEDGE",
+			"Research",
+			"SCIENCE",
+			"Science: Mathematics",
 		},
 	},
 	"all": {
@@ -988,7 +1146,7 @@ var DefaultSkills = map[string]Skill{
 	"Command":           {base: 5, weight: 10},
 	"Demolition":        {base: 1, weight: 10},
 	"Disguise":          {base: 5, weight: 10},
-	"Dodge":             {base: -1, weight: 30},
+	"Dodge":             {base: 0, weight: 25},
 	"Drive: Automobile": {base: 20, weight: -10},
 	"Etiquette":         {base: 5, weight: 15},
 	"Fast Talk":         {base: 5, weight: 15},
@@ -1003,7 +1161,8 @@ var DefaultSkills = map[string]Skill{
 	"Navigate":          {base: 10, weight: 10},
 	"Perform":           {base: 5, weight: 5},
 	"Persuade":          {base: 15, weight: 5},
-	"Research":          {base: 25, weight: 5},
+	"Psychotherapy":     {base: 5, weight: 15},
+	"Research":          {base: 25, weight: 0},
 	"Ride":              {base: 5, weight: 5},
 	"Sense":             {base: 10, weight: 5},
 	"Sleight of Hand":   {base: 5, weight: 10},
@@ -1143,9 +1302,9 @@ var MedicineSkills = map[string]Skill{
 
 // PsychologySkills is a map of skills.
 var PsychologySkills = map[string]Skill{
-	"Medicine: Psychotherapy": {base: 5, weight: 30},
-	"Medicine: Psychiatry":    {base: 5, weight: 30},
-	"Knowledge: Psychology":   {base: 5, weight: 30},
+	"Psychotherapy":        {base: 5, weight: 30},
+	"Medicine: Psychiatry": {base: 5, weight: 30},
+	"Science: Psychology":  {base: 5, weight: 30},
 }
 
 // PerformSkills is a map of skills.

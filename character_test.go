@@ -1,52 +1,56 @@
 package tlfgen
 
 import (
-	"strings"
 	"testing"
-
-	log "github.com/sirupsen/logrus"
 )
 
-func TestNewCharacter(t *testing.T) {
+func TestProfessions(t *testing.T) {
 	logLevel := "ERROR"
 	if testing.Verbose() {
 		logLevel = "INFO"
 	}
-	opts := []Opts{
-		{
-			LogLevel: logLevel,
-		},
-		{
-			Profession: "Clerical Worker",
-		},
-		{
-			Profession: "Computer Hacker or Technician",
-		},
-		{
-			Profession: "Antiquarian",
-		},
-		{
-			Name:            "Borkenhekenaken",
-			Gender:          "Male",
-			PersonalityType: "Bruiser",
-			Profession:      "Military Officer",
-			Assignment:      "Plumber",
-			Seed:            "1575d911f49e59ee",
-			LogLevel:        logLevel,
-		},
+	opts := []Opts{}
+	for _, profession := range professions {
+		opts = append(opts, Opts{
+			Profession: profession,
+			LogLevel:   logLevel,
+		})
 	}
 	for _, o := range opts {
-		c, _ := NewCharacter(o)
-		if c.Name == "" {
-			t.Error("Missing name.")
-		}
-		if c.Seed == "" {
-			t.Error("Incorrect Seed. No value assigned")
-		}
-		if !arrayContains(genders, c.Gender) {
-			g := strings.Join(genders, ", ")
-			t.Errorf("Incorrect gender. Expected '%s' in '%s'.", c.Gender, g)
-		}
-		log.Info(c.ToJSON(true))
+		NewCharacter(o)
+	}
+}
+
+func TestPersonalityTypes(t *testing.T) {
+	logLevel := "ERROR"
+	if testing.Verbose() {
+		logLevel = "INFO"
+	}
+	opts := []Opts{}
+	for _, personalityType := range personalityTypes {
+		opts = append(opts, Opts{
+			PersonalityType: personalityType,
+			LogLevel:        logLevel,
+		})
+	}
+	for _, o := range opts {
+		NewCharacter(o)
+	}
+}
+
+func TestAssignments(t *testing.T) {
+	logLevel := "ERROR"
+	if testing.Verbose() {
+		logLevel = "INFO"
+	}
+	opts := []Opts{}
+	for _, assignment := range assignments {
+		opts = append(opts, Opts{
+			Assignment: assignment,
+			LogLevel:   logLevel,
+		})
+	}
+	for _, o := range opts {
+		NewCharacter(o)
 	}
 }

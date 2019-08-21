@@ -300,7 +300,7 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) *Character
 		for _, s := range skills {
 			w := 0
 			if c.Skills[s] < max {
-				w = int(float64((c.Skills[s])+AllSkills[s].weight+1) / float64(weightTotal) * 100)
+				w = int(float64((c.Skills[s])+AllSkills[s].weight+10) / float64(weightTotal) * 50)
 				weights = append(weights, w)
 				newSkills = append(newSkills, s)
 			} else {
