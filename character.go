@@ -209,6 +209,8 @@ func (c *Character) calcBaseSkills() *Character {
 		log.Info("Added base skill: ", name)
 	}
 	c.Skills["Language: Own"] = c.Base.Intelligence * 5
+	AllSkills["Language: Own"] = Skill{base: c.Skills["Language: Own"],
+		weight: -c.Skills["Language: Own"]}
 	log.Info("Added base skill: Language: Own")
 	c.Skills["Dodge"] = c.Base.Dexterity * 2
 	log.Info("Added base skill: Dodge")
@@ -220,7 +222,7 @@ func (c *Character) calcPersonalitySkills() *Character {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Added personality type skill: ", name)
+			log.Info("Improved personality type skill: ", name)
 		}
 		c.Skills[name] += PersonalityTypes[c.PersonalityType].bonus
 	}
@@ -233,7 +235,7 @@ func (c *Character) calcAssignmentSkills() *Character {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Added assignment skill: ", name)
+			log.Info("Improved assignment skill: ", name)
 		}
 		c.Skills[name] += Assignments[c.Assignment].bonus
 	}
@@ -242,7 +244,7 @@ func (c *Character) calcAssignmentSkills() *Character {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Added assignment skill: ", name)
+			log.Info("Improved assignment skill: ", name)
 		}
 		c.Skills[name] += Assignments["all"].bonus
 	}
@@ -286,21 +288,30 @@ func (c *Character) rollAdditionalSkillPoints(points int) *Character {
 
 func (c *Character) rollSkillPoints(skills []string, points, max int) *Character {
 	sort.Strings(skills)
-	for points := points; points > 0; points-- {
+	for points > 0 {
+		newSkills := []string{}
 		weights := []int{}
 		weightTotal := 0
 		for _, s := range skills {
 			weightTotal += c.Skills[s]
 		}
 		for _, s := range skills {
-			w := int(float64((c.Skills[s])+AllSkills[s].weight+10) / float64(weightTotal) * 100)
-			if c.Skills[s] >= max {
-				w = 0
+			w := 0
+			if c.Skills[s] < max {
+				w = int(float64((c.Skills[s])+AllSkills[s].weight+1) / float64(weightTotal) * 100)
+				weights = append(weights, w)
+				newSkills = append(newSkills, s)
+				log.Warning("Maxed out skill: ", s)
 			}
-			weights = append(weights, w)
 		}
+		if arraySum(weights) <= 0 {
+			log.Warning("No where else to put skill points!")
+			return c
+		}
+		skills = newSkills
 		skill := weightedRandomChoice(skills, weights)
 		c.Skills[skill]++
+		points--
 	}
 	for k, v := range c.Skills {
 		if v != AllSkills[k].base {

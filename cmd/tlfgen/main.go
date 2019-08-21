@@ -25,7 +25,7 @@ Options:
   -S, --skill-points=<str>  The character's bonus skill points. [default: 0]
   -b, --attr-bonus=<str>    One of {"smart", "tough", "mystical"}.
   -s, --seed=<hex>          Character generation signature.
-  --log-level=<str>         One of {INFO, ERROR}. [default: ERROR]
+  --log-level=<str>         One of {INFO, WARN, ERROR}. [default: ERROR]
   -h --help
   --version
 `

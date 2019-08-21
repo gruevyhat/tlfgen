@@ -53,7 +53,7 @@ var Professions = map[string]Profession{
 			"Medicine",
 			"Perform",
 			"Persuade",
-			"Psychotherapy",
+			"Medicine: Psychotherapy",
 			"REPAIR",
 			"SCIENCE",
 			"TECHNOLOGY USE",
@@ -84,7 +84,7 @@ var Professions = map[string]Profession{
 			"Language: Own",
 			"Navigate",
 			"PILOT",
-			"Psychology",
+			"Knowledge: Psychology",
 			"Repair: Electronics",
 			"Repair: Mechanical",
 			"Ride",
@@ -127,8 +127,8 @@ var Professions = map[string]Profession{
 			"LANGUAGE",
 			"Language: Own",
 			"Listen",
-			"Medicine",
-			"Psychotherapy",
+			"MEDICINE",
+			"PSYCHOLOGY",
 			"REPAIR",
 			"SCIENCE",
 			"TECHNOLOGY USE",
@@ -174,6 +174,7 @@ var Professions = map[string]Profession{
 			"Sense",
 			"Spot",
 			"Stealth",
+			"PSYCHOLOGY",
 		},
 		offset: 0,
 		n:      0,
@@ -235,7 +236,7 @@ var Professions = map[string]Profession{
 			"CRAFT",
 			"Drive",
 			"Grapple",
-			"Heavy Machine",
+			"HEAVY MACHINE",
 			"Appraise",
 			"COMPUTER USE",
 			"Fine Manipulation",
@@ -281,7 +282,7 @@ var Professions = map[string]Profession{
 			"ARTILLERY",
 			"Demolition",
 			"Drive",
-			"Heavy Machine",
+			"HEAVY MACHINE",
 			"KNOWLEDGE",
 			"PILOT",
 			"REPAIR",
@@ -303,7 +304,7 @@ var Professions = map[string]Profession{
 			"Spot",
 			"Insight",
 			"LANGUAGE",
-			"Psychotherapy",
+			"Medicine: Psychotherapy",
 			"SCIENCE",
 			"Science: Biology",
 		},
@@ -865,6 +866,8 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(KnowledgeSkills)
 	case "CRAFT":
 		name, newSkill = randomWeightedSkillChoice(CraftSkills)
+	case "PSYCHOLOGY":
+		name, newSkill = randomWeightedSkillChoice(PsychologySkills)
 	case "MEDICINE":
 		name, newSkill = randomWeightedSkillChoice(MedicineSkills)
 	case "LANGUAGE":
@@ -885,6 +888,8 @@ func getSkill(name string) (string, Skill) {
 		name, newSkill = randomWeightedSkillChoice(TechnicalSkills)
 	case "COMPUTER USE":
 		name, newSkill = randomWeightedSkillChoice(ComputerUseSkills)
+	case "HEAVY MACHINE":
+		name, newSkill = randomWeightedSkillChoice(HeavyMachineSkills)
 	case "DRIVE":
 		name, newSkill = randomWeightedSkillChoice(DriveSkills)
 	case "ANY":
@@ -1123,7 +1128,16 @@ var MedicineSkills = map[string]Skill{
 	"Medicine: Pathology":         {base: 5, weight: 30},
 	"Medicine: Pediatrics":        {base: 5, weight: 20},
 	"Medicine: Radiology":         {base: 5, weight: 20},
+	"Medicine: Psychotherapy":     {base: 5, weight: 30},
+	"Medicine: Psychiatry":        {base: 5, weight: 30},
 	"Medicine: Surgery":           {base: 5, weight: 20},
+}
+
+// PsychologySkills is a map of skills.
+var PsychologySkills = map[string]Skill{
+	"Medicine: Psychotherapy": {base: 5, weight: 30},
+	"Medicine: Psychiatry":    {base: 5, weight: 30},
+	"Knowledge: Psychology":   {base: 5, weight: 30},
 }
 
 // PerformSkills is a map of skills.
@@ -1163,10 +1177,13 @@ var LanguageSkills = map[string]Skill{
 	"Language: Latin":    {base: 0, weight: 15},
 	"Language: Mandarin": {base: 0, weight: 15},
 	"Language: Other":    {base: 0, weight: 15},
-	"Language: Own":      {base: -1, weight: -50},
+	"Language: Own":      {base: -1, weight: -1},
 	"Language: Spanish":  {base: 0, weight: 15},
 	"Language: Swahili":  {base: 0, weight: 15},
 	"Language: Swedish":  {base: 0, weight: 15},
+	"Language: Enochian": {base: 0, weight: 15},
+	"Language: Aramaic":  {base: 0, weight: 15},
+	"Language: Hebrew":   {base: 0, weight: 15},
 }
 
 // ScienceSkills is a map of skills.
@@ -1234,6 +1251,7 @@ var GeneralSkills = joinMaps(
 	MedicineSkills,
 	PerformSkills,
 	PilotSkills,
+	PsychologySkills,
 	LanguageSkills,
 	ScienceSkills,
 	TechnologyUseSkills,

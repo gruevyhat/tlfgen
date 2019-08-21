@@ -43,13 +43,22 @@ func arrayContains(arr []string, s string) bool {
 	return false
 }
 
-func arrayRemove(s string, a []string) []string {
-	for i, x := range a {
-		if x == "" || x == s {
-			a = append(a[:i], a[i+1:]...)
-		}
-	}
+func arrayRemoveInt(a []int, i int) []int {
+	a = append(a[:i], a[i+1:]...)
 	return a
+}
+
+func arrayRemoveString(a []string, i int) []string {
+	a = append(a[:i], a[i+1:]...)
+	return a
+}
+
+func arraySum(a []int) int {
+	sum := 0
+	for _, i := range a {
+		sum += i
+	}
+	return sum
 }
 
 func hash(s string) uint32 {
@@ -120,15 +129,19 @@ func weightedRandomChoice(choices []string, weights []int) string {
 	for _, w := range weights {
 		sum += w
 	}
-	r := randomInt(sum)
-	total := 0
-	for i, w := range weights {
-		total += w
-		if r <= total {
-			return choices[i]
+	if sum > 0 {
+		r := randomInt(sum)
+		total := 0
+		for i, w := range weights {
+			total += w
+			if r <= total {
+				return choices[i]
+			}
 		}
+	} else {
+		log.Error("Skill weights sum to zero!")
 	}
-	return choices[0]
+	return ""
 }
 
 // Die represents a single die of the form <code>D6+<pips>.
