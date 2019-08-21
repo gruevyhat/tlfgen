@@ -3,6 +3,8 @@ package tlfgen
 import (
 	"strings"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func TestNewCharacter(t *testing.T) {
