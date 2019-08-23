@@ -222,9 +222,9 @@ func (c *Character) calcPersonalitySkills() *Character {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Improved personality type skill: ", name)
 		}
 		c.Skills[name] += PersonalityTypes[c.PersonalityType].bonus
+			log.Info("Improved personality type skill: ", name)
 	}
 	return c
 }
@@ -235,18 +235,18 @@ func (c *Character) calcAssignmentSkills() *Character {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Improved assignment skill: ", name)
 		}
 		c.Skills[name] += Assignments[c.Assignment].bonus
+			log.Info("Improved assignment skill: ", name)
 	}
 	// All assignments skills
 	for _, name := range Assignments["all"].skills {
 		name, newSkill := getSkill(name)
 		if _, ok := c.Skills[name]; !ok {
 			c.Skills[name] = newSkill.base
-			log.Info("Improved assignment skill: ", name)
 		}
 		c.Skills[name] += Assignments["all"].bonus
+			log.Info("Improved assignment skill: ", name)
 	}
 	return c
 }
@@ -300,7 +300,7 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) *Character
 		for _, s := range skills {
 			w := 0
 			if c.Skills[s] < max {
-				w = int(float64((c.Skills[s])+AllSkills[s].weight+10) / float64(weightTotal) * 50)
+				w = int(float64((c.Skills[s])+AllSkills[s].weight+1) / float64(weightTotal) * 50)
 				weights = append(weights, w)
 				newSkills = append(newSkills, s)
 			} else {
@@ -312,6 +312,7 @@ func (c *Character) rollSkillPoints(skills []string, points, max int) *Character
 			return c
 		}
 		skill := weightedRandomChoice(newSkills, weights)
+		//skill := randomChoice(newSkills)
 		c.Skills[skill]++
 		points--
 		skills = newSkills
